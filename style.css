@@ -1,7 +1,12 @@
 body{
-	background-color: #cccedf;
+	background-image: url('img/bg.jpg');
 	margin: 0;
 	padding: 0;
+	color: #ffffff;
+}
+
+a{
+	color: #ffffff;
 }
 
 #form{
@@ -51,26 +56,30 @@ textarea{
 
 .maindiv{
 	margin-top: 20px;
-	background-color: #ffffff;
+	background-color: hsla(240, 100%, 25%, 0.1);
 	padding: 20px;
 }
 
-table{
+ table{
 	font-family: arial, sans-serif;
 	border-collapse: collapse;
 	width: 100%;
-	border-bottom: 1px solid #000638; 
+	border-bottom: 1px solid #000638;
+	background-color: #ffffff;
+	color: #000638;
 }
 
 td, th{
 	border: none;
 	text-align: left;
 	padding: 8px;
+	border-bottom: 1px solid #000638;
 
 }
 
-tr:nth-child(even){
+a tr:nth-child(even){
 	background-color: #cccedf
+
 }
 
 th{
