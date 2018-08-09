@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Questions</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<style type="text/css">
+		input[type=text]{
+			width: 100%;
+			padding: 12px 20px;
+			margin-top: 1px;
+			display: inline-block;
+			border: 1px solid #000638;
+			border-radius: 4px;
+			box-sizing: border-box;
+		}
+
+		form{
+			margin: 0 auto;
+			width: 500px;
+		}
+
+		input[type=submit]{
+			width: 50%;
+			padding: 12px 20px;
+			margin: 8px 0;
+			display: inline-block;
+			border: 1px solid #000638;
+			border-radius: 4px;
+			box-sizing: border-box;
+			background-color: #000638;
+			color: #ffffff;
+		}
+	</style>
+</head>
+<body>
+	<div class="navbar">
+		<ul>
+			<li style="float: left; color: #ffffff; padding:10px">StackOverflow-Lite</li>
+			<li><a href="signin.html">Signout</a></li>
+			<li><a href="profile.html">Profile</a></li>
+			<li><a href="index.html" class="active">Questions</a></li>
+		
+
+		</ul>
+	</div>
+	<div class="maindiv">
+		<form>
+		<fieldset>
+			<legend>Ask A Question</legend>
+				Add Picture: <input type="file" name="picture" accept="image/*"><br>
+				<h4>Title</h4>
+				<input type="text" name="title">
+				<h4>Description</h4>
+				<textarea rows="6"></textarea>
+				<h4>Tags</h4>
+				<input type="text" name="tags" placeholder="add atleast one tag. Ps tags should include your programming language">
+				<input type="submit" value="Post Your Question">
+		</fieldset>
+		
+	</form>
+
+		
+
+
+
+	</div>
+	<script type="text/javascript">
+
+	</script>
+</body>
+</html>
