@@ -65,10 +65,13 @@ textarea{
 	border-collapse: collapse;
 	width: 100%;
 	border-bottom: 1px solid #000638;
-	background-color: #ffffff;
+	background-color: #cccedf;
 	color: #000638;
 }
 
+a td {
+	color: #0006638;
+}
 td, th{
 	border: none;
 	text-align: left;
@@ -132,6 +135,8 @@ li a:hover{
 	text-align: center;
 	margin-top: 40px;
 	padding: 15px;
+	background-color: #ffffff;
+	color: #000638;
 }
 
 .title{
