@@ -8,4 +8,5 @@ api = Api(app)
 
 
 from app import routes
+from app.questions import views
 
