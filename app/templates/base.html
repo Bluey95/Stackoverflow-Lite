@@ -12,8 +12,10 @@
         <div class="navbar" id="myNavBar">
           <ul>
             <li style="float: left; color: #ffffff; padding:10px">StackOverflow-Lite</li>
+            <li><a href="{{ url_for('userprofile') }}">Profile</a></li>
+            <li><a href="{{ url_for('questions') }}">Questions</a></li>
             <li><a href="{{ url_for('index') }}">Home</a></li>
-            <li><a href="{{ url_for('login') }}">Login</a></li>
+
           </ul>
         </div>
         <hr>

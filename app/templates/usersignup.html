@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Register</h1>
+    <form id="form">
+        <fieldset>
+            <legend>Sign Up</legend>
+                Profile Picture:<input type="file" name="image"><br>
+                First Name:<br><input type="text" name="FirstName"><br>
+                Last Name:<br><input type="text" name="LastName"><B></B>
+                Email Address:<br><input type="text" name="Email"><br>
+                Enter Password:<br><input type="text" name="Password"><br>
+                Enter Password Again:<br><input type="text" name="Password"><br><br>
+
+                <a href="{{ url_for('questions') }}"> Sign Up</a> Alady have an account? <a class="btn" href="{{ url_for('userlogin') }}">Sign In</a> 
+        </fieldset>
+{% endblock %}
+

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+     
+    <form id="form" action="" method="POST" style="margin-top: 150px;">
+        <fieldset>
+            <legend>Sign In</legend>
+                Email Address/Username:<br><input type="text" placeholder="email" name="username" value="{{
+          request.form.username }}"><br>
+                Enter Password:<br><input type="text" placeholder="password" name="password" value="{{
+          request.form.password }}"><br><br>
+                <input type="submit" value="Login" class="btn"> No account?<a href="{{ url_for('usersignup') }}"> Sign Up</a>
+        </fieldset>
+    </form>
+    {%if error%}
+    <h3 class="error" style="text-align: center;"><strong>Error:</strong>{{ error }}</h3>
+    {% endif %}
+   
+{% endblock %}
