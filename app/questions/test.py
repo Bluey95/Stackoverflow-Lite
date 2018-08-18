@@ -17,5 +17,8 @@ class Question_tests(unittest.TestCase):
         response = self.question.create(title = "blue", body = "Is green better?")
         self.assertEqual(response[0]["title"], "blue")
 
-    
+    def test_get_question(self, title, body):
+        """ test that can get a question """
+        self.question.get_question(title = "blue", body = "Is green better?")
+        self.assertEqual("blue", "blue")
 

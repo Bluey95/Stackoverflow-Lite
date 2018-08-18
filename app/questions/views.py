@@ -10,25 +10,10 @@ def question():
             data = request.get_json()
             title = data['title']
             body = data['body']
-            questionObject.create(title, body)
+            res = questionObject.create(title, body)
             return jsonify({"message":"Succesfull."})
     elif request.method == "GET":
-        data = questionObject.get_question(title, body)
+        data = questionObject.get_question()
         return jsonify({"Questions" : data})
     
 
-@api.route('/questions/<int:id>', methods=["GET", "POST"])
-def question_id(id):
-    """ Method to create and retrieve a specific question."""
-    data = questionObject.get_specific_question(id)
-    return data
-
-
-@api.route('/questions/<int:qid>/answer', methods=["POST"])
-def answer(qid):
-
-    """ Method to create and retrieve questions."""
-    data = request.get_json()
-    comment = data['comment']
-    questionObject.add_answer(qid, comment)
-    return jsonify({"message":"Succesfull."})
