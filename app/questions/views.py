@@ -1,17 +1,34 @@
 from flask import Flask, request, flash, redirect, url_for, jsonify
-from app import app
+from . import api
 from .models import Question
 questionObject = Question() 
 
-@app.route('/api/v1/questions', methods=["POST"])
-def questions():
+@api.route('/questions', methods=["GET", "POST"])
+def question():
     """ Method to create and retrieve questions."""
     if request.method == "POST":
             data = request.get_json()
             title = data['title']
             body = data['body']
-            res = questionObject.create(title, body)
-            if len(res) < 1:
-                return jsonify({"message":"Error creating the question."})
-            return jsonify({"response":res, "message":"Succesfull."})
+            questionObject.create(title, body)
+            return jsonify({"message":"Succesfull."})
+    elif request.method == "GET":
+        data = questionObject.get_question(title, body)
+        return jsonify({"Questions" : data})
     
+
+@api.route('/questions/<int:id>', methods=["GET", "POST"])
+def question_id(id):
+    """ Method to create and retrieve a specific question."""
+    data = questionObject.get_specific_question(id)
+    return data
+
+
+@api.route('/questions/<int:qid>/answer', methods=["POST"])
+def answer(qid):
+
+    """ Method to create and retrieve questions."""
+    data = request.get_json()
+    comment = data['comment']
+    questionObject.add_answer(qid, comment)
+    return jsonify({"message":"Succesfull."})
