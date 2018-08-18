@@ -23,5 +23,9 @@ class Question(object):
        """ get questions """
        return self.question_list
 
-    
+    def get_specific_question(self, id):
+        """get specific question """
+        question = [question for question in self.question_list if question['questionid'] == id]
+        ans = [answ for answ in self.answer_list if answ['qid'] == id]
+        return jsonify({"Question": question, "Answers" : ans })
         
