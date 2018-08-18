@@ -22,3 +22,5 @@ class Question_tests(unittest.TestCase):
         self.question.get_question(title = "blue", body = "Is green better?")
         self.assertEqual("blue", "blue")
 
+    
+
