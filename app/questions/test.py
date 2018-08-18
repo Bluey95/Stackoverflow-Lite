@@ -29,3 +29,12 @@ class Question_tests(unittest.TestCase):
             self.question.get_specific_question(id = "1")
             self.assertEqual("1", "1")
 
+    def test_post_answer(self):
+        """ test that can add a question """
+        self.question.add_answer(qid = "1", comment = "rachel", upvote="0", downvote="0")
+        self.assertEqual("rachel", "rachel")
+       
+
+
+
+
