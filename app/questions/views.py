@@ -17,3 +17,18 @@ def question():
         return jsonify({"Questions" : data})
     
 
+@api.route('/questions/<int:id>', methods=["GET", "POST"])
+def question_id(id):
+    """ Method to create and retrieve a specific question."""
+    data = questionObject.get_specific_question(id)
+    return data
+
+
+@api.route('/questions/<int:qid>/answer', methods=["POST"])
+def answer(qid):
+
+    """ Method to create and retrieve questions."""
+    data = request.get_json()
+    comment = data['comment']
+    res = questionObject.add_answer(qid, comment)
+    return jsonify({"message":"Succesfull."})

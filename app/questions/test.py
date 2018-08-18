@@ -17,10 +17,24 @@ class Question_tests(unittest.TestCase):
         response = self.question.create(title = "blue", body = "Is green better?")
         self.assertEqual(response[0]["title"], "blue")
 
-    def test_get_question(self, title, body):
+    def test_get_question(self):
         """ test that can get a question """
-        self.question.get_question(title = "blue", body = "Is green better?")
+        self.question.get_question()
         self.assertEqual("blue", "blue")
 
-    
+    def test_get_specific_question(self):
+        """ test that can get a specific question """
+        app = Flask(__name__)
+        with app.app_context():
+            self.question.get_specific_question(id = "1")
+            self.assertEqual("1", "1")
+
+    def test_post_answer(self):
+        """ test that can add a question """
+        self.question.add_answer(qid = "1", comment = "rachel", upvote="0", downvote="0")
+        self.assertEqual("rachel", "rachel")
+       
+
+
+
 

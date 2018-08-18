@@ -23,5 +23,20 @@ class Question(object):
        """ get questions """
        return self.question_list
 
-    
+    def get_specific_question(self, id):
+        """get specific question """
+        question = [question for question in self.question_list if question['questionid'] == id]
+        ans = [answ for answ in self.answer_list if answ['qid'] == id]
+        return jsonify({"Question": question, "Answers" : ans })
+
+    def add_answer(self, qid, comment, upvote=0, downvote=0):
+        self.answer = {}
+       
+        self.id = len(self.answer)
+        self.answer['id'] = self.id + 1
+        self.answer['qid'] = qid
+        self.answer['comment'] = comment
+        self.answer['upvote'] = upvote
+        self.answer['downvote'] = downvote
+        self.answer_list.append(self.answer)
         
