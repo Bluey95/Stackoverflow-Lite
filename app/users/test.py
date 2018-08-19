@@ -31,6 +31,13 @@ class Question_tests(unittest.TestCase):
         """ test that can get a user """
         self.user.get_user()
         self.assertEqual("susan", "susan")
+
+    def test_get_specific_user(self):
+        """ test that can get a specific user """
+        app = Flask(__name__)
+        with app.app_context():
+            self.user.get_specific_user(id = "1")
+            self.assertEqual("1", "1")
        
 
 
