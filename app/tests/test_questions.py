@@ -1,6 +1,6 @@
 from flask import Flask, request, flash, redirect, url_for, jsonify
 import unittest
-from .models import Question
+from ..questions.models import Question
 
 
 class Question_tests(unittest.TestCase):
@@ -33,4 +33,7 @@ class Question_tests(unittest.TestCase):
         """ test that can add a question """
         self.question.add_answer(qid = "1", comment = "rachel", upvote="0", downvote="0")
         self.assertEqual("rachel", "rachel")
+
+
+       
        

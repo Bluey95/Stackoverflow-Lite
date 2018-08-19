@@ -1,9 +1,8 @@
 from flask import Flask, request, flash, redirect, url_for, jsonify
 import unittest
-from app.models import User
+from ..users.models import User
 
-
-class Question_tests(unittest.TestCase):
+class User_tests(unittest.TestCase):
     def setUp(self):
         """ set up global object before each test """
         self.user = User()
@@ -38,5 +37,3 @@ class Question_tests(unittest.TestCase):
         with app.app_context():
             self.user.get_specific_user(id = "1")
             self.assertEqual("1", "1")
-       
-
