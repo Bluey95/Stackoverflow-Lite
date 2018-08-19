@@ -4,7 +4,7 @@ python:
 
   - "2.7.12"
   - "2.7"
-  
+
 install: 
   - pip install -r requirements.txt
   - pip install coveralls
@@ -13,3 +13,8 @@ install:
 script: pytest
 
 after_success: coveralls
+
+deploy:
+  provider: heroku
+  api_key:
+    secure: "YOUR ENCRYPTED API KEY"
