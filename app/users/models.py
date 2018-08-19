@@ -1,6 +1,5 @@
 import uuid
 from flask import jsonify
-from passlib.hash import sha256_crypt
 import re
 
 class User(object):
