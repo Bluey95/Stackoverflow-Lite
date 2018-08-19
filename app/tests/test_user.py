@@ -13,7 +13,7 @@ class User_tests(unittest.TestCase):
 
     def test_register_user(self):
         """ test that can create a user """
-        response = self.user.create(username = "susan", password = "susan")
+        response = self.user.create(username = "susan", password = "susan", confirmpass = "susan" )
         self.assertEqual(response[0]["username"], "susan")
 
     def test_login_user(self):
