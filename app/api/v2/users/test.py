@@ -40,6 +40,3 @@ class Question_tests(unittest.TestCase):
             self.assertEqual("1", "1")
        
 
-
-
-
