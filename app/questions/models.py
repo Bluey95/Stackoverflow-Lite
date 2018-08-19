@@ -1,8 +1,6 @@
 import uuid
 from flask import jsonify
 
-from instance.config import app_config
-
 class Question(object):
     def __init__(self):
         """ Initialize empty questions list"""  
