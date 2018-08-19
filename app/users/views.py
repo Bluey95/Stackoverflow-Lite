@@ -37,3 +37,9 @@ def users():
     if request.method == "GET":
         data = userObject.get_user()
         return jsonify({"Users" : data})
+
+@user_api.route('/users/<int:id>', methods=["GET", "POST"])
+def user_id(id):
+    """ Method to create and retrieve a specific user."""
+    data = userObject.get_specific_user(id)
+    return data

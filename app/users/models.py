@@ -31,6 +31,11 @@ class User(object):
     def get_user(self):
        """ get users """
        return self.user_list
+
+    def get_specific_user(self, id):
+        """get specific user """
+        user = [user for user in self.user_list if user['userid'] == id]
+        return jsonify({"User": user})
         
     
 
