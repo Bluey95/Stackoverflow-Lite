@@ -17,6 +17,17 @@ class User(object):
         self.user_list.append(self.users)
         return self.user_list
 
+    def login(self, username, password):
+        for user in self.user_list:
+            if username == user['username']:
+                if password == user['password']:
+                    return "successful"
+                else:
+                    return "wrong password"
+            else:
+                return "user does not exist", 200
+        return "You are successfully logged in"
+        
     
 
     

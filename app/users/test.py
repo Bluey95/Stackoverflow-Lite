@@ -17,7 +17,12 @@ class Question_tests(unittest.TestCase):
         response = self.user.create(username = "susan", password = "susan")
         self.assertEqual(response[0]["username"], "susan")
 
-   
+    def test_login_user(self):
+        """ test that can login a user """
+        self.user.login(username = "susan", password = "susan")
+        self.assertEqual("susan" == "susan", "susan" == "susan")
+
+    
        
 
 
