@@ -32,3 +32,8 @@ def login():
                 return jsonify(response ="login successful"), 200
     return jsonify({"message" : res })
     
+@user_api.route('/users', methods=["GET"])    
+def users():
+    if request.method == "GET":
+        data = userObject.get_user()
+        return jsonify({"Users" : data})

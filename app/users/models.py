@@ -27,6 +27,10 @@ class User(object):
             else:
                 return "user does not exist", 200
         return "You are successfully logged in"
+
+    def get_user(self):
+       """ get users """
+       return self.user_list
         
     
 

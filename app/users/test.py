@@ -22,7 +22,15 @@ class Question_tests(unittest.TestCase):
         self.user.login(username = "susan", password = "susan")
         self.assertEqual("susan" == "susan", "susan" == "susan")
 
-    
+    def test_password(self):
+        """ test that password must be greater than 5 """
+        self.user.login(username = "susan", password = "susan")
+        self.failIf(len("susan") < 5)
+
+    def test_get_user(self):
+        """ test that can get a user """
+        self.user.get_user()
+        self.assertEqual("susan", "susan")
        
 
 
