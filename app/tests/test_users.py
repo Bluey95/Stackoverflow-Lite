@@ -1,6 +1,6 @@
 from flask import Flask, request, flash, redirect, url_for, jsonify
 import unittest
-from models import User
+from app.users.models import User
 
 
 class Question_tests(unittest.TestCase):
