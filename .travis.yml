@@ -5,11 +5,15 @@ python:
 
 install:
   - pip install -r requirements.txt
-  - pip install coveralls
+  - pip install pytest
 
 script: 
-  - py.test --cov=api
+  - cd app/api/v1/questions/test.py
+  - pytest test.py
 
+script: 
+  - cd app/api/v2/users/test.py
+  - pytest test.py
 
 after_success:
-- coveralls
+  - pytest
