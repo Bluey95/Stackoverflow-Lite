@@ -1,6 +1,5 @@
 from flask import Flask, request, flash, redirect, url_for, jsonify, session
 from . import user_api
-from config import DevelopmentConfig
 from .models import User
 userObject = User() 
 
