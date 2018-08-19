@@ -8,7 +8,6 @@ install:
   - pip install pytest
 
 script: 
-  - cd app/api/v1/questions/test.py
   - pytest test.py
 
 script: 

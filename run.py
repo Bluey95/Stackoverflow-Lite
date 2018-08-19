@@ -1,6 +1,7 @@
 import os
 
 from app import create_app
+from app import questions
 from flask_restful import Api
 
 @pytest.fixture
