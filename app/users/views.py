@@ -11,23 +11,34 @@ def reg():
             data = request.get_json()
             username = data['username']
             password = data['password']
+            confirmpass = data['confirmpass']
+            if len(password) < 5:
+                return "Password too short"
+            elif password != confirmpass:
+                return "passwords do not match"
             for user in userObject.user_list:
-                if username == user['username']:
+                if not userObject.valid_username(username):
+                    return "Username Not Valid"
+                elif username == user['username']:
                     return "username already exists. Try another name."
-                elif len(password) < 5:
-                    return "Password too short"
-            userObject.create(username, password)
+               
+            userObject.create(username, password, confirmpass)
             return jsonify({"message":"Dear " + username + " you have been succesfully registered."})
 
 @user_api.route('/login', methods=["POST"])
 def login():
     """ Method to login user """
-    user_details = request.get_json()
-    username = user_details['username']
-    password = user_details['password']
-    res = userObject.login(username, password)
-    if res == "successful":
-        for user in userObject.user_list:
+    data = request.get_json()
+    for user in userObject.user_list:
+        username = data['username']
+        password = data['password']
+        if not userObject.valid_username(username):
+            return "Username Not Valid"
+        else:
+            if not userObject.valid_password(password):
+                return "Password Not Valid"
+        res = userObject.login(username, password)
+        if res == "successful":
             if user['username'] == username and user['password'] == password:
                 return jsonify(response ="login successful"), 200
     return jsonify({"message" : res })
