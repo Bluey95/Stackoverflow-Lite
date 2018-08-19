@@ -1,18 +1,21 @@
 import uuid
 from flask import jsonify
+from passlib.hash import sha256_crypt
+import re
 
 class User(object):
     def __init__(self):
         """ Initialize empty user list"""  
         self.user_list = []
 
-    def create(self, username, password):
+    def create(self, username, password, confirmpass):
         """Create users"""
         self.users = {}
         
         self.id = len(self.user_list)
         self.users['username'] = username
         self.users['password'] = password
+        self.users['confirmpass'] = confirmpass
         self.users['userid'] = self.id + 1
         self.user_list.append(self.users)
         return self.user_list
@@ -36,6 +39,20 @@ class User(object):
         """get specific user """
         user = [user for user in self.user_list if user['userid'] == id]
         return jsonify({"User": user})
+
+    def valid_username(self, username):
+		"""check username length and special characters"""
+		if len(username) < 3 or not re.match("^[a-zA-Z0-9_ ]*$", username):
+			return False
+		else:
+			return True
+            
+    def valid_password(self, password):
+        """check password length and special characters"""
+        if len(password) < 3 or not re.match("^[a-zA-Z0-9_ ]*$", password):
+            return False
+        else:
+            return True
         
     
 
