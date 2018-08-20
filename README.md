@@ -13,7 +13,7 @@
 
 
 
-2. To interact with the api endpoints, visit the link [here]()<br>
+2. To interact with the api endpoints, visit the link [here](https://stackoverflow-lite-api-heroku.herokuapp.com)<br>
 
 ## Use the following endpoints to perform the specified tasks
 		 
