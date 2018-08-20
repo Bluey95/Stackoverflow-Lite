@@ -40,12 +40,12 @@ class User(object):
         return jsonify({"User": user})
 
     def valid_username(self, username):
-		"""check username length and special characters"""
-		if len(username) < 3 or not re.match("^[a-zA-Z0-9_ ]*$", username):
-			return False
-		else:
-			return True
-            
+        """check username length and special characters"""
+        if len(username) < 3 or not re.match("^[a-zA-Z0-9_ ]*$", username):
+            return False
+        else:
+            return True
+    
     def valid_password(self, password):
         """check password length and special characters"""
         if len(password) < 3 or not re.match("^[a-zA-Z0-9_ ]*$", password):
