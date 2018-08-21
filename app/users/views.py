@@ -58,7 +58,7 @@ def login():
     username = data['username']
     password = data['password']
     res = userObject.login(username, password)
-return res 
+    return res 
     
 @user_api.route('/users', methods=["GET"])    
 def users():

@@ -12,10 +12,10 @@ class Question(object):
         """Create questions"""
         self.questions = {}
         
-        self.quizId = len(self.question_list)
+        self.quiz_id = len(self.question_list)
         self.questions['title'] = title
         self.questions['body'] = body
-        self.questions['questionid'] = self.quizId + 1
+        self.questions['questionid'] = self.quiz_id + 1
         self.question_list.append(self.questions)
         return self.question_list
         
