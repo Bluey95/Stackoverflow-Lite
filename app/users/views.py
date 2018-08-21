@@ -3,44 +3,47 @@ from . import user_api
 from .models import User
 userObject = User() 
 
+def validate_data(data):
+    """validate user details"""
+    try:
+        # check if the username is more than 3 characters
+        if len(data['username'].strip()) < 3:
+            return "username must be more than 3 characters"
+        # check if password has spacese
+        elif " " in data["password"]:
+            return "password should be one word, no spaces"
+        elif len(data['password'].strip()) < 5:
+            return "Password should have atleast 5 characters"
+        # check if the passwords match
+        elif data['password'] != data['confirmpass']:
+            return "passwords do not match"
+        else:
+            return "valid"
+    except Exception as error:
+        return "please provide all the fields, missing " + str(error)
+
 @user_api.route('/registration', methods=["POST"])
 def reg():
     """ Method to create user account."""
     if request.method == "POST":
             data = request.get_json()
-            username = data['username']
-            password = data['password']
-            confirmpass = data['confirmpass']
-            if len(password) < 5:
-                return "Password too short"
-            elif password != confirmpass:
-                return "passwords do not match"
-            for user in userObject.user_list:
-                if not userObject.valid_username(username):
-                    return "Username Not Valid"
-                elif username == user['username']:
-                    return "username already exists. Try another name."
-               
-            userObject.create(username, password, confirmpass)
-            return jsonify({"message":"Dear " + username + " you have been succesfully registered."})
+            res = validate_data(data)
+            if res == "valid":
+                username = data['username']
+                password = data['password']
+                response = userObject.create(username, password)
+                return response
+            return jsonify({"message":res}), 400
+
 
 @user_api.route('/login', methods=["POST"])
 def login():
     """ Method to login user """
     data = request.get_json()
-    for user in userObject.user_list:
-        username = data['username']
-        password = data['password']
-        if not userObject.valid_username(username):
-            return "Username Not Valid"
-        else:
-            if not userObject.valid_password(password):
-                return "Password Not Valid"
-        res = userObject.login(username, password)
-        if res == "successful":
-            if user['username'] == username and user['password'] == password:
-                return jsonify(response ="login successful"), 200
-    return jsonify({"message" : res })
+    username = data['username']
+    password = data['password']
+    res = userObject.login(username, password)
+    return res 
     
 @user_api.route('/users', methods=["GET"])    
 def users():

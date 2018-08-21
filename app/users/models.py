@@ -1,5 +1,5 @@
 import uuid
-from flask import jsonify
+from flask import jsonify, session
 import re
 
 class User(object):
@@ -7,53 +7,45 @@ class User(object):
         """ Initialize empty user list"""  
         self.user_list = []
 
-    def create(self, username, password, confirmpass):
+    def create(self, username, password):
         """Create users"""
         self.users = {}
-        
-        self.id = len(self.user_list)
-        self.users['username'] = username
-        self.users['password'] = password
-        self.users['confirmpass'] = confirmpass
-        self.users['userid'] = self.id + 1
-        self.user_list.append(self.users)
-        return self.user_list
+        if not self.if_username(username):  
+            self.id = len(self.user_list)
+            self.users['username'] = username
+            self.users['password'] = password
+            self.users['userid'] = self.id + 1
+            self.user_list.append(self.users)
+            return jsonify({"message": "Successful", "user": self.users}), 201
+        return jsonify({"message": "Username is taken."}), 400
 
     def login(self, username, password):
-        for user in self.user_list:
-            if username == user['username']:
-                if password == user['password']:
-                    return "successful"
+        if len(self.user_list) == 0:
+            return jsonify({"message": "Please register first."})
+        else:
+            for user in self.user_list:
+                if username == user['username']:
+                    if password == user['password']:
+                        session['userid'] = user['userid']
+                        session['username'] = user['username']
+                        return jsonify({"message":"You are successfully logged in",
+                            "user": user}), 201
+                    else:
+                        return jsonify({"message":"Wrong username or password"}), 401
                 else:
-                    return "wrong password"
-            else:
-                return "user does not exist", 200
-        return "You are successfully logged in"
-
-    def get_user(self):
-       """ get users """
-       return self.user_list
+                    return jsonify({"message":"user does not exist"}), 200
 
     def get_specific_user(self, id):
         """get specific user """
         user = [user for user in self.user_list if user['userid'] == id]
         return jsonify({"User": user})
 
-    def valid_username(self, username):
-        """check username length and special characters"""
-        if len(username) < 3 or not re.match("^[a-zA-Z0-9_ ]*$", username):
-            return False
-        else:
-            return True
-    
-    def valid_password(self, password):
-        """check password length and special characters"""
-        if len(password) < 3 or not re.match("^[a-zA-Z0-9_ ]*$", password):
-            return False
-        else:
-            return True
-        
-    
-
-    
-        
+    def if_username(self, username):
+        """check if username exist"""
+        if len(self.user_list):
+            for user in self.user_list:
+                if user['username'] == username:
+                    return True
+                else:
+                    return False
+        return False
