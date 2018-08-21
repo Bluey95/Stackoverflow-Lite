@@ -29,6 +29,13 @@ class Question(object):
         ans = [answ for answ in self.answer_list if answ['qid'] == id]
         return jsonify({"Question": question, "Answers" : ans })
 
+    def filter_by_id(self, id):
+        for question in self.question_list:
+            if question['questionid'] == id:
+                return jsonify(question)
+            return jsonify("Question with that id does not exist.")
+        return jsonify("error")
+
     def add_answer(self, qid, comment, upvote=0, downvote=0):
         self.answer = {}
        
@@ -39,4 +46,5 @@ class Question(object):
         self.answer['upvote'] = upvote
         self.answer['downvote'] = downvote
         self.answer_list.append(self.answer)
+        return jsonify(self.answer)
         
