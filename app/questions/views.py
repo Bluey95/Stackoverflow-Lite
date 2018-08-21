@@ -44,7 +44,9 @@ def question_id(id):
 def answer(qid):
 
     """ Method to create and retrieve questions."""
-    data = request.get_json()
-    comment = data['comment']
-    res = questionObject.add_answer(qid, comment)
-    return jsonify({"message":"Succesfull."})
+    if 'username' in session:
+        data = request.get_json()
+        comment = data['comment']
+        res = questionObject.add_answer(qid, comment)
+        return res
+    return jsonify({"message": "Please login to answer a question."})
