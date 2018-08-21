@@ -1,5 +1,5 @@
 import uuid
-from flask import jsonify
+from flask import jsonify, session
 
 class Question(object):
     def __init__(self):
@@ -12,30 +12,26 @@ class Question(object):
         """Create questions"""
         self.questions = {}
         
-        self.quiz_id = len(self.question_list)
+        self.quizId = len(self.question_list)
         self.questions['title'] = title
         self.questions['body'] = body
-        self.questions['questionid'] = self.quiz_id + 1
+        self.questions['userid'] = session['userid']
+        self.questions['postedBy'] = session['username']
+        self.questions['questionid'] = self.quizId + 1
         self.question_list.append(self.questions)
-        return self.question_list
-        
-        
+        return jsonify({"message": "Successful.", "question":self.question_list}), 201        
+
     def get_question(self):
        """ get questions """
-       return self.question_list
-
-    def get_specific_question(self, id):
-        """get specific question """
-        question = [question for question in self.question_list if question['questionid'] == id]
-        ans = [answ for answ in self.answer_list if answ['qid'] == id]
-        return jsonify({"Question": question, "Answers" : ans })
+       return jsonify({"Questions": self.question_list}), 200
 
     def filter_by_id(self, id):
         for question in self.question_list:
             if question['questionid'] == id:
-                return jsonify(question)
+                ans = [answ for answ in self.answer_list if answ['qid'] == id]
+                return jsonify({"Question":question, "Answer": ans})
             return jsonify("Question with that id does not exist.")
-        return jsonify("error")
+        return jsonify("Question with that id does not exist.")
 
     def add_answer(self, qid, comment, upvote=0, downvote=0):
         self.answer = {}
@@ -43,9 +39,9 @@ class Question(object):
         self.id = len(self.answer)
         self.answer['id'] = self.id + 1
         self.answer['qid'] = qid
+        self.answer['answerdBy'] = session['username']
         self.answer['comment'] = comment
         self.answer['upvote'] = upvote
         self.answer['downvote'] = downvote
         self.answer_list.append(self.answer)
         return jsonify(self.answer)
-        
