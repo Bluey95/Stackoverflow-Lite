@@ -3,6 +3,19 @@ from . import api
 from .models import Question
 questionObject = Question() 
 
+def validate_data(data):
+    """validate request details"""
+    try:
+        # check if title more than 10 characters
+        if len(data['title'].strip()) < 5:
+            return "Title Must Be more than 5 characters"
+        elif len(data['body'].strip()) < 10:
+            return "Body must be more than 10 letters"
+        else:
+            return "valid"
+    except Exception as error:
+        return "please provide all the fields, missing " + str(error)
+
 @api.route('/questions', methods=["GET", "POST"])
 def question():
     """ Method to create and retrieve questions."""

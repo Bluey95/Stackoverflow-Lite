@@ -6,7 +6,6 @@ class Question(object):
         """ Initialize empty questions list"""  
         self.question_list = []
         self.answer_list = []
-        #self.questionid = 0
 
     def create(self, title, body):
         """Create questions"""
