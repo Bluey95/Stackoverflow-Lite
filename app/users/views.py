@@ -40,21 +40,6 @@ def reg():
 def login():
     """ Method to login user """
     data = request.get_json()
-    for user in userObject.user_list:
-        username = data['username']
-        password = data['password']
-        if not userObject.valid_username(username):
-            return "Username Not Valid"
-        else:
-            if not userObject.valid_password(password):
-                return "Password Not Valid"
-        res = userObject.login(username, password)
-        if res == "successful":
-            if user['username'] == username and user['password'] == password:
-                return jsonify(response ="login successful"), 200
-    return jsonify({"message" : res })
-
-    data = request.get_json()
     username = data['username']
     password = data['password']
     res = userObject.login(username, password)
