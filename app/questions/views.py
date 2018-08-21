@@ -1,4 +1,4 @@
-from flask import Flask, request, flash, redirect, url_for, jsonify
+from flask import Flask, request, flash, redirect, url_for, jsonify, session
 from . import api
 from .models import Question
 questionObject = Question() 
@@ -20,15 +20,18 @@ def validate_data(data):
 def question():
     """ Method to create and retrieve questions."""
     if request.method == "POST":
+        if 'username' in session:
             data = request.get_json()
-            title = data['title']
-            body = data['body']
-            res = questionObject.create(title, body)
-            return jsonify({"message":"Succesfull."})
-    elif request.method == "GET":
-        data = questionObject.get_question()
-        return jsonify({"Questions" : data})
-    
+            res = validate_data(data)
+            if res == "valid":
+                title = data['title']
+                body = data['body']
+                response = questionObject.create(title, body)
+                return response
+            return jsonify({"message":res})
+        return jsonify({"message": "Please login to post a question."})
+    data = questionObject.get_question()
+    return data
 
 @api.route('/questions/<int:id>', methods=["GET", "POST"])
 def question_id(id):
