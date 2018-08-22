@@ -17,17 +17,16 @@
 
 ## Use the following endpoints to perform the specified tasks
 		 
-| 	Endpoint                              | Functionality                                  |({content_type:application/json}    |                  
-| ----------------------------------------| -----------------------------------------------|------------------------------------|
-| POST api/v2/registration                | Create a user account                          |"username", "password","confirmpass"|          
-| POST /api/v2/login                      | Login a user                                   |"username", "password"              |
-| GET api/v2/users                        | Retrieve the registered users                  |-                                   |
-| GET /api/v2/users/<int:id>              | Retrieve a specific registered user            |-                                   |
-| POST /api/v1/questions                  | Create a question                              |"title", "body"                     |
-| GET /api/v1/questions                   | Retrieve posted questions                      |-                                   |
-| POST /api/v1/questions/<int:id>/answer  | Create an answer to a specific question        |"comment"                           |
-| GET /api/v1/questions/<int:id>          | Retrieve a specific posted question and answer |-                                   |
-
+| 	Endpoint                               | Functionality                                                  
+| ---------------------------------------------| -----------------------------------------------|
+| POST api/v1/auth/registration                | Create a user account                          |          
+| POST /api/v1/auth/login                      | Login a user                                   |
+| GET api/v1/auth/users                        | Retrieve the registered users                  |
+| GET /api/v1/auth/users/<int:id>              | Retrieve a specific registered user            |
+| POST /api/v1/questions                       | Create a question                              |
+| GET /api/v1/questions                        | Retrieve posted questions                      |
+| POST /api/v1/questions/<int:id>/answer       | Create an answer to a specific question        |
+| GET /api/v1/questions/<int:id>               | Retrieve a specific posted question and answer |
 		 
 
 ## Application Features
