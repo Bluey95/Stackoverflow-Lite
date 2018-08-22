@@ -10,7 +10,7 @@ def create_app(config_name):
     app = Flask(__name__, instance_relative_config=True)
     # print(app_config.get('FLASK_CONFIG'))
     # print('*'*123)
-    app.config.from_object(app_config[os.environ.get('FLASK_CONFIG')])
+    app.config.from_object(app_config[os.getenv('FLASK_CONFIG')])
 
     from .questions import api as api_blueprint
     app.register_blueprint(api_blueprint, url_prefix='/api/v1')
