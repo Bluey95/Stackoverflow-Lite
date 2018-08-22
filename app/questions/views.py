@@ -40,7 +40,7 @@ def question():
 @api.route('/questions/<int:id>', methods=["GET", "POST"])
 def question_id(id):
     """ Method to create and retrieve a specific question."""
-    data = questionObject.filter_by_id(id)
+    data = questionObject.get_question_by_id(id)
     return data
 
 

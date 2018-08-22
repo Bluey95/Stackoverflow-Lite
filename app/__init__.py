@@ -38,4 +38,10 @@ def create_app(config_name):
             return jsonify({'error': True, 'msg': 'Please use the valid api urls'.format(request.path)}), error.code
         return render_template('err_{}.html'.format(error.code)), error.code
 
+    @app.errorhandler(400)
+    def method_not_allowed_error(error):
+        if request.path.startswith(API_PATH_INDEX):
+            return jsonify({'error': True, 'msg': 'Please check your inputs'.format(request.path)}), error.code
+        return render_template('err_{}.html'.format(error.code)), error.code
+
     return app
