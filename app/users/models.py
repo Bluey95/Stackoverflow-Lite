@@ -29,11 +29,11 @@ class User(object):
                         session['userid'] = user['userid']
                         session['username'] = user['username']
                         return jsonify({"message":"You are successfully logged in",
-                            "user": user}), 201
+                            "user": user}), 200
                     else:
                         return jsonify({"message":"Wrong username or password"}), 401
                 else:
-                    return jsonify({"message":"user does not exist"}), 200
+                    return jsonify({"message":"user does not exist"}), 404
 
     def get_specific_user(self, id):
         """get specific user """

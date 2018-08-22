@@ -11,13 +11,15 @@ class TestViews(unittest.TestCase):
         # pass in test configurations
         config_name = 'testing'
         app = create_app(config_name)
+        self.register_user = json.dumps(dict(username="tests", password='pass123',
+                    confirmpass='pass123'))
 
         self.client = app.test_client()
 
     def test_registration(self):
         """ Test for user registration """
         resource = self.client.post('api/v1/auth/registration',
-                data=json.dumps(dict(username="tests", password='pass123',
+                data = json.dumps(dict(username="test", password='pass123',
                     confirmpass='pass123')), content_type='application/json')
 
         data = json.loads(resource.data.decode())
@@ -59,16 +61,13 @@ class TestViews(unittest.TestCase):
         """"
         Test for login
         """
-        # Register a user first
-        self.client.post('api/v1/auth/registration',
-                data=json.dumps(dict(username="test", password='pass123',
-                    confirmpass='pass123')), content_type='application/json')
         # Login the user
-        resource = self.client.post('api/v1/auth/login', data=json.dumps(dict(username="test", password='pass123'
+        resource = self.client.post('api/v1/auth/login', data=json.dumps(dict(username="tests", password='pass123'
                                                                                  )), content_type='application/json')
 
         data = json.loads(resource.data.decode())
-        self.assertEqual(resource.status_code, 201)
+        print(data)
+        self.assertEqual(resource.status_code, 200)
         self.assertEqual(resource.content_type, 'application/json')
         self.assertEqual(data['message'].strip(), 'You are successfully logged in')
 
@@ -76,13 +75,8 @@ class TestViews(unittest.TestCase):
         """"
         Test for wrong login credentials
         """
-        # Register user
-        self.client.post('api/v1/auth/registration',
-                data=json.dumps(dict(username="test", password='pass123',
-                    confirmpass='pass123')), content_type='application/json')
-
         # Login user
-        resource = self.client.post('api/v1/auth/login', data=json.dumps(dict(username="test", password='pass12'
+        resource = self.client.post('api/v1/auth/login', data=json.dumps(dict(username="tests", password='pass12'
                                                                                  )), content_type='application/json')
 
         data = json.loads(resource.data.decode())
@@ -90,48 +84,6 @@ class TestViews(unittest.TestCase):
         self.assertEqual(resource.content_type, 'application/json')
         self.assertEqual(data['message'].strip(), 'Wrong username or password')
     
-    def test_questions_endpoints(self):
-        """
-        Test users can post questions
-        """
-        # Register User
-        self.client.post('api/v1/auth/registration',
-                data=json.dumps(dict(username="test", password='pass123',
-                    confirmpass='pass123')), content_type='application/json')
-
-        # Login user
-        self.client.post('api/v1/auth/login', data=json.dumps(dict(username="test", password='pass123'
-                                                                                 )), content_type='application/json')
-
-        # create Question
-        resource = self.client.post('/api/v1/questions', data=json.dumps(dict(title="Blue chronicles", body="Why blue is awesome?"
-                                                                                             )), content_type='application/json')
-        data = json.loads(resource.data.decode())
-        self.assertEqual(resource.content_type, 'application/json')
-        self.assertEqual(resource.status_code, 201)
-        self.assertEqual(data["message"], "Successful.")
-
-        """
-        Test users can retrieve all questions
-        """
-        # create Questions
-        self.client.post('/api/v1/questions', data=json.dumps(dict(title="Unit testing.", body="Why is unit testing important?"
-                                                                                             )), content_type='application/json')                                                                                                                       # Retrieve Questions
-        resource = self.client.get('/api/v1/questions', content_type='application/json')
-        data = json.loads(resource.data.decode())
-        print(data)
-        self.assertEqual(resource.content_type, 'application/json')
-        self.assertEqual(resource.status_code, 200)
-        self.assertEqual(len(data['Questions']), 2)
-
-        """
-        Test users can retrieve a specific question
-        """                                                                     # Retrieve Question By id
-        resource = self.client.get('/api/v1/questions/1', content_type='application/json')
-        data = json.loads(resource.data.decode())
-        self.assertEqual(resource.content_type, 'application/json')
-        self.assertEqual(resource.status_code, 200)
-        self.assertEqual(data['Question']['title'], "Blue chronicles")
 
 if __name__ == '__main__':
     unittest.main()
