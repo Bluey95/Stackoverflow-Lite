@@ -7,7 +7,11 @@ def validate_data(data):
     """validate request details"""
     try:
         # check if title more than 10 characters
-        if len(data['title'].strip()) < 5:
+        if len(data['title'].strip()) == 0:
+            return "Title cannot be empty"
+        elif len(data['body'].strip()) == 0:
+            return "Question body cannot be empty"
+        elif len(data['title'].strip()) < 5:
             return "Title Must Be more than 5 characters"
         elif len(data['body'].strip()) < 10:
             return "Body must be more than 10 letters"
@@ -28,7 +32,7 @@ def question():
                 body = data['body']
                 response = questionObject.create(title, body)
                 return response
-            return jsonify({"message":res})
+            return jsonify({"message":res}), 422
         return jsonify({"message": "Please login to post a question."})
     data = questionObject.get_question()
     return data
