@@ -28,7 +28,7 @@ class TestViews(unittest.TestCase):
         Test users can post questions
         """
         resource = self.client.post('/api/v1/questions', data=self.question, content_type='application/json')
-        data = json.loads(resource.data.decode()
+        data = json.loads(resource.data.decode())
         self.assertEqual(resource.content_type, 'application/json')
         self.assertEqual(resource.status_code, 201)
         self.assertEqual(data["message"], "Successful.")
