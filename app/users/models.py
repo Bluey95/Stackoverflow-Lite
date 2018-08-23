@@ -53,7 +53,7 @@ class User(object):
     def get_user_by_username(self, username):
         """retrieve a specific user"""
         cur.execute(
-            "SELECT * FROM users where username=%s", (username))
+            "SELECT * FROM users WHERE username=%s", (username,))
         user = cur.fetchone()
         if user:
             return self.serializer(user)

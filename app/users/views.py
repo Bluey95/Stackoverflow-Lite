@@ -48,12 +48,22 @@ def reg():
 @user_api.route('/login', methods=["POST"])
 def login():
     """ Method to login user """
-    data = request.get_json()
-    username = data['username']
-    password = data['password']
-    res = userObject.login(username, password)
-    return res 
+    user_details = request.get_json()
     
+    try:
+        print("hello")
+        user = userObject.get_user_by_username(user_details['username'])
+        print("here")
+        if user and userObject.verify_password(user_details['password'], user['password']):
+            return jsonify({"user": user, "message": "Login Successfull."}), 201
+        else:
+            # no user found, return an error message
+            response = {'message': 'invalid username or password, Please try again'}
+            return jsonify(response), 401
+    except Exception as error:
+        response = {'message': str(error)}
+        return jsonify(response), 401
+
 @user_api.route('/users', methods=["GET"])    
 def users():
     if request.method == "GET":
