@@ -27,8 +27,10 @@ class TestViews(unittest.TestCase):
         """
         Test users can post questions
         """
+        # create Question
         resource = self.client.post('/api/v1/questions', data=self.question, content_type='application/json')
         data = json.loads(resource.data.decode())
+        print(data["message"])
         self.assertEqual(resource.content_type, 'application/json')
         self.assertEqual(resource.status_code, 201)
         self.assertEqual(data["message"], "Successful.")
@@ -37,6 +39,7 @@ class TestViews(unittest.TestCase):
         """
         Test users can retrieve all questions
         """
+        # create Questions
         self.client.post('/api/v1/questions', data=self.question, content_type='application/json')                                                                                                                       # Retrieve Questions
         resource = self.client.get('/api/v1/questions', data = self.question, content_type='application/json')
         data = json.loads(resource.data.decode())
@@ -59,6 +62,7 @@ class TestViews(unittest.TestCase):
         Test for missing title
         """
         resource = self.client.post('api/v1/questions', data=json.dumps(dict(title="", body="Why blue is awesome?")), content_type='application/json')
+
         data = json.loads(resource.data.decode())
         self.assertEqual(resource.status_code, 422)
         self.assertEqual(resource.content_type, 'application/json')
@@ -69,7 +73,9 @@ class TestViews(unittest.TestCase):
         Test for wrong login credentials
         """
         resource = self.client.post('api/v1/questions', data=json.dumps(dict(title="titles", body="")), content_type='application/json')
+
         data = json.loads(resource.data.decode())
+        print(data)
         self.assertEqual(resource.status_code, 422)
         self.assertEqual(resource.content_type, 'application/json')
         self.assertEqual(data['message'].strip(), 'Question body cannot be empty')
