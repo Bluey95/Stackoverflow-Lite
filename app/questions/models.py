@@ -25,12 +25,12 @@ class Question(object):
                 VALUES (%s, %s, %s, %s) RETURNING id;
                 """,
                 (self.title, self.body, created_by, user_id))
-            """fetch the new question, pick the id, and assign to questionid"""
-            questionid = cur.fetchone()[0]
-            """save question"""
-            self.save()
-            return jsonify({"message": "Successful", "question": self.fetch_question_by_id(questionid)}), 201
-        
+        """fetch the new question, pick the id, and assign to questionid"""
+        questionid = cur.fetchone()[0]
+        """save question"""
+        self.save()
+        return jsonify({"message": "Successful", "question": self.fetch_question_by_id(questionid)}), 201
+    
     def get_all_questions(self):
         """retrieve all users"""
         cur.execute("SELECT * FROM questions")
