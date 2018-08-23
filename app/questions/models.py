@@ -40,7 +40,7 @@ class Question(object):
 
         for question in questions_tuple:
             """append questions after serializing to the list"""
-            questions.append(self.question_serializer(question))
+            questions.append(self.question_serialiser(question))
         return jsonify({"Questions": questions})
 
     def question_serialiser(self, question):
