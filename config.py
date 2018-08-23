@@ -15,9 +15,6 @@ class DevelopmentConfig(Config):
 
 	DEBUG = True
 	SECRET_KEY = "itsasecret"
-    TESTING = False
-    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
-	# SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
 
 class ProductionConfig(Config):
 	"""
@@ -26,8 +23,6 @@ class ProductionConfig(Config):
 	DEBUG = False
 	TESTING = False
 	SECRET_KEY = "itsasecret"
-    # SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
-	JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
 
 class TestingConfig(Config):
 	"""
