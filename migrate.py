@@ -31,6 +31,17 @@ def create_answers_table():
     print("Table Answers Successfully Created")
     conn.commit()
 
+def create_blacklist_tokens():
+    """ Function To create blacklist_tokens table"""    
+          
+    cur = conn.cursor()
+    cur.execute("DROP TABLE IF EXISTS blacklist_tokens")
+    cur.execute("CREATE TABLE blacklist_tokens(id serial PRIMARY KEY, token varchar,\
+        blacklisted_on date);")
+    conn.commit()
+    print("Table blacklist_tokens Successfullyn Created")
+
 create_users_table()
 create_questions_table()
 create_answers_table()
+create_blacklist_tokens()

@@ -22,16 +22,15 @@ def before_request():
                     # check if no error in string format was returned
                     # find the user with the id on the token
                     user = User()
-                    res = userObj.user_by_id(id=res)
+                    res = user.user_by_id(res)
+                    print(res)
                     g.userid = res['id']
                     g.username = res['username']
                     return
-                return jsonify({"message": "Please register or \
-                login to continue"}), 401
+                return jsonify({"message": "Please register or login to continue"}), 401
         except Exception:
 
-            return jsonify({"message": "Authorization header or \
-            acess token is missing."}), 400
+            return jsonify({"message": "Authorization header or access itoken is missng."}), 400
 
 
 def validate_data(data):

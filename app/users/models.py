@@ -98,7 +98,6 @@ class User(object):
 
     def serialiser_user(self, user):
         """ Serialize tuple into dictionary """
-        print()
         user_details = dict(
             id=user[0],
             username=user[1],
@@ -106,10 +105,13 @@ class User(object):
         )
         return user_details
 
-    def user_by_id(self, id):
+    def user_by_id(self, userid):
         """ Serialize tuple into dictionary """
-        cur.execute("SELECT * FROM users WHERE id = %s;", (id,))
+        cur.execute("SELECT * FROM users WHERE id = %s", (userid,))
         user = cur.fetchone()
-        return self.serialiser_user(user)
+        if user:
+            return self.serialiser_user(user)
+        else:
+            return False
 
     
