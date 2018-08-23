@@ -21,20 +21,22 @@ class User(object):
     def create(self):
         """Create users"""
         if self.username_exist(self.username) is False:
-            """hash the password"""
-            hash_pass = self.hash_password(self.password)
-            """call cursor to read INSERT query"""
-            cur.execute(
-                """
-                INSERT INTO users (username, email, password)
-                VALUES (%s, %s, %s) RETURNING id;
-                """,
-                (self.username, self.email, hash_pass))
-            """fetch the new user, pick the id, and assign to userid"""
-            userid = cur.fetchone()[0]
-            """save user"""
-            self.save()
-            return jsonify({"message": "Successful", "user": self.user_by_id(userid)}), 201
+            if self.get_user_by_email(self.email) is False:
+                """hash the password"""
+                hash_pass = self.hash_password(self.password)
+                """call cursor to read INSERT query"""
+                cur.execute(
+                    """
+                    INSERT INTO users (username, email, password)
+                    VALUES (%s, %s, %s) RETURNING id;
+                    """,
+                    (self.username, self.email, hash_pass))
+                """fetch the new user, pick the id, and assign to userid"""
+                userid = cur.fetchone()[0]
+                """save user"""
+                self.save()
+                return jsonify({"message": "Successful", "user": self.user_by_id(userid)}), 201
+            return jsonify({"message": "Email is already taken."}), 400
         return jsonify({"message": "Username is taken."}), 400
 
     def get_all_users(self):
@@ -49,11 +51,19 @@ class User(object):
             users.append(self.serializer(user))
         return jsonify({"Users": users})
 
-
     def get_user_by_username(self, username):
         """retrieve a specific user"""
         cur.execute(
             "SELECT * FROM users WHERE username=%s", (username,))
+        user = cur.fetchone()
+        if user:
+            return self.serializer(user)
+        return False
+
+    def get_user_by_email(self, email):
+        """retrieve a specific user"""
+        cur.execute(
+            "SELECT * FROM users WHERE email=%s", (email,))
         user = cur.fetchone()
         if user:
             return self.serializer(user)

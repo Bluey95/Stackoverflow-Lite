@@ -29,12 +29,8 @@ def validate_data(data):
 def reg():
     """ Method to create user account."""
     if request.method == "POST":
-
-        print('gjfkdjgfk')
         data = request.get_json()
-        print("here")
         res = validate_data(data)
-        print(res)
         if res == "valid":
             email = data['email']
             username = data['username']
@@ -51,9 +47,7 @@ def login():
     user_details = request.get_json()
     
     try:
-        print("hello")
         user = userObject.get_user_by_username(user_details['username'])
-        print("here")
         if user and userObject.verify_password(user_details['password'], user['password']):
             return jsonify({"user": user, "message": "Login Successfull."}), 201
         else:

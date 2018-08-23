@@ -15,9 +15,9 @@ class TestViews(unittest.TestCase):
         self.question = json.dumps(dict(title="Blue chronicles", body="Why blue is awesome?"))
         self.register_user = json.dumps(dict(username="tests", password='pass123',
                     confirmpass='pass123'))
-        self.client.post('api/v1/auth/registration',
+        self.client.post('api/v2/auth/registration',
                 data = self.register_user, content_type='application/json')
-        self.client.post('api/v1/auth/login', data=json.dumps(dict(username="tests", password='pass123'
+        self.client.post('api/v2/auth/login', data=json.dumps(dict(username="tests", password='pass123'
                                                                                  )), content_type='application/json')
         
     def tearDown(self):
@@ -27,7 +27,7 @@ class TestViews(unittest.TestCase):
         """
         Test users can post questions
         """
-        resource = self.client.post('/api/v1/questions', data=self.question, content_type='application/json')
+        resource = self.client.post('/api/v2/questions', data=self.question, content_type='application/json')
         data = json.loads(resource.data.decode())
         self.assertEqual(resource.content_type, 'application/json')
         self.assertEqual(resource.status_code, 201)
@@ -37,8 +37,8 @@ class TestViews(unittest.TestCase):
         """
         Test users can retrieve all questions
         """
-        self.client.post('/api/v1/questions', data=self.question, content_type='application/json')                                                                                                                       # Retrieve Questions
-        resource = self.client.get('/api/v1/questions', data = self.question, content_type='application/json')
+        self.client.post('/api/v2/questions', data=self.question, content_type='application/json')                                                                                                                       # Retrieve Questions
+        resource = self.client.get('/api/v2/questions', data = self.question, content_type='application/json')
         data = json.loads(resource.data.decode())
         self.assertEqual(resource.content_type, 'application/json')
         self.assertEqual(resource.status_code, 200)
@@ -48,7 +48,7 @@ class TestViews(unittest.TestCase):
         """
         Test users can retrieve a specific question
         """                                                                    
-        resource = self.client.get('/api/v1/questions/1', data = self.question, content_type='application/json')
+        resource = self.client.get('/api/v2/questions/1', data = self.question, content_type='application/json')
         data = json.loads(resource.data.decode())
         self.assertEqual(resource.content_type, 'application/json')
         self.assertEqual(resource.status_code, 200)
@@ -58,7 +58,7 @@ class TestViews(unittest.TestCase):
         """"
         Test for missing title
         """
-        resource = self.client.post('api/v1/questions', data=json.dumps(dict(title="", body="Why blue is awesome?")), content_type='application/json')
+        resource = self.client.post('api/v2/questions', data=json.dumps(dict(title="", body="Why blue is awesome?")), content_type='application/json')
         data = json.loads(resource.data.decode())
         self.assertEqual(resource.status_code, 422)
         self.assertEqual(resource.content_type, 'application/json')
@@ -68,7 +68,7 @@ class TestViews(unittest.TestCase):
         """"
         Test for wrong login credentials
         """
-        resource = self.client.post('api/v1/questions', data=json.dumps(dict(title="titles", body="")), content_type='application/json')
+        resource = self.client.post('api/v2/questions', data=json.dumps(dict(title="titles", body="")), content_type='application/json')
         data = json.loads(resource.data.decode())
         self.assertEqual(resource.status_code, 422)
         self.assertEqual(resource.content_type, 'application/json')
