@@ -24,7 +24,7 @@ class Question(object):
        """ get questions """
        return jsonify({"Questions": self.question_list}), 200
 
-    def get_question_by_id(self, id):
+    def filter_by_id(self, id):
         for question in self.question_list:
             if question['questionid'] == id:
                 ans = [answ for answ in self.answer_list if answ['qid'] == id]
@@ -44,5 +44,3 @@ class Question(object):
         self.answer['downvote'] = downvote
         self.answer_list.append(self.answer)
         return jsonify(self.answer)
-
-        
