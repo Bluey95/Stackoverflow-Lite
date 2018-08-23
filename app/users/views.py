@@ -1,6 +1,7 @@
 from flask import Flask, request, flash, redirect, url_for, jsonify, session
 from . import user_api
 from .models import User
+import re
 userObject = User() 
 
 def validate_data(data):
@@ -9,7 +10,9 @@ def validate_data(data):
         # check if the username is more than 3 characters
         if len(data['username'].strip()) < 3:
             return "username must be more than 3 characters"
-        # check if password has spacese
+        elif not re.match("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+[a-zA-Z0-9-.]+$", data['email'].strip()):
+            return "please provide a valid email"
+        # check if password has space
         elif " " in data["password"]:
             return "password should be one word, no spaces"
         elif len(data['password'].strip()) < 5:
@@ -26,14 +29,20 @@ def validate_data(data):
 def reg():
     """ Method to create user account."""
     if request.method == "POST":
-            data = request.get_json()
-            res = validate_data(data)
-            if res == "valid":
-                username = data['username']
-                password = data['password']
-                response = userObject.create(username, password)
-                return response
-            return jsonify({"message":res}), 400
+
+        print('gjfkdjgfk')
+        data = request.get_json()
+        print("here")
+        res = validate_data(data)
+        print(res)
+        if res == "valid":
+            email = data['email']
+            username = data['username']
+            password = data['password']
+            user = User(username, email, password)
+            response = user.create()
+            return response
+        return jsonify({"message":res}), 400
 
 
 @user_api.route('/login', methods=["POST"])

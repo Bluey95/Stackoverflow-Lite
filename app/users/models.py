@@ -20,7 +20,7 @@ class User(object):
 
     def create(self):
         """Create users"""
-        if self.username_exist(self.username) is False
+        if self.username_exist(self.username) is False:
             """hash the password"""
             hash_pass = self.hash_password(self.password)
             """call cursor to read INSERT query"""
@@ -29,12 +29,12 @@ class User(object):
                 INSERT INTO users (username, email, password)
                 VALUES (%s, %s, %s) RETURNING id;
                 """,
-                (self.username, self.email, hash_pass))e
+                (self.username, self.email, hash_pass))
             """fetch the new user, pick the id, and assign to userid"""
             userid = cur.fetchone()[0]
             """save user"""
             self.save()
-             return jsonify({"message": "Successful", "user": self.user_by_id(userid)}), 201
+            return jsonify({"message": "Successful", "user": self.user_by_id(userid)}), 201
         return jsonify({"message": "Username is taken."}), 400
 
     def get_all_users(self):
@@ -92,8 +92,7 @@ class User(object):
         user_details = dict(
             id=user[0],
             username=user[1],
-            email=user[2],
-            password=user[4]
+            email=user[2]
         )
         return user_details
 
@@ -101,7 +100,6 @@ class User(object):
         """ Serialize tuple into dictionary """
         cur.execute("SELECT * FROM users WHERE id = %s;", (id,))
         user = cur.fetchone()
-
-    return self.serialiser_user(user)
+        return self.serialiser_user(user)
 
     
