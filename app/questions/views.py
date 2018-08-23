@@ -1,7 +1,33 @@
-from flask import Flask, request, flash, redirect, url_for, jsonify, session
+from flask import Flask, request, flash, redirect, url_for, jsonify, session, abort, render_template, g
 from . import api
 from .models import Question
+from app.users.models import User
+from app.jwtfile import Jwt_details
 questionObject = Question() 
+jwt_obj = Jwt_details()
+
+@api.before_app_request
+def before_request():
+    """get the user bafore every request"""
+    if request.endpoint and 'auth' not in request.url:
+
+        try:
+            if request.method != 'OPTIONS':
+                auth_header = request.headers.get('authorization')
+                g.user = None
+                access_token = auth_header.split(" ")[1]
+                res = jwt_obj.decode_auth_token(access_token)
+                if isinstance(res, int) and not jwt_obj.is_blacklisted(access_token):
+                    # check if no error in string format was returned
+                    # find the user with the id on the token
+                    user = User()
+                    response = user.user_by_id(res)
+                    g.userid = response['id']
+                    g.username = response['username']
+                    return
+                return jsonify({"message": "Please register or login to continue"}), 401
+        except Exception:
+            return jsonify({"message": "Authorization header or acess token is missing."}), 400
 
 def validate_data(data):
     """validate request details"""
@@ -24,16 +50,15 @@ def validate_data(data):
 def question():
     """ Method to create and retrieve questions."""
     if request.method == "POST":
-        if 'username' in session:
-            data = request.get_json()
-            res = validate_data(data)
-            if res == "valid":
-                title = data['title']
-                body = data['body']
-                response = questionObject.create(title, body)
-                return response
-            return jsonify({"message":res}), 422
-        return jsonify({"message": "Please login to post a question."})
+        data = request.get_json()
+        res = validate_data(data)
+        if res == "valid":
+            title = data['title']
+            body = data['body']
+            question = Question(title, body)
+            response = question.create()
+            return response
+        return jsonify({"message":res}), 422
     data = questionObject.get_question()
     return data
 

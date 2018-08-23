@@ -1,4 +1,4 @@
-from flask import jsonify, session
+from flask import jsonify, g
 import re
 import psycopg2
 from datetime import date, datetime
@@ -17,8 +17,8 @@ class Question(object):
 
     def create(self):
         """Create questions"""
-        created_by = session["username"]
-        user_id = session["userid"]
+        created_by = g.username
+        user_id = g.userid
         cur.execute(
                 """
                 INSERT INTO questions (title, body, created_by, user_id)
@@ -41,23 +41,22 @@ class Question(object):
         for question in questions_tuple:
             """append questions after serializing to the list"""
             questions.append(self.question_serializer(question))
-        return jsonify({"QUestions": questions})
+        return jsonify({"Questions": questions})
 
     def question_serialiser(self, question):
         """ Serialize tuple into dictionary """
-        print()
         question_details = dict(
             id=question[0],
             title=question[1],
             body=question[2],
-            created_by=created_by[3],
-            user_id=user_id[4]
+            created_by=question[3],
+            user_id=question[4]
         )
         return question_details
 
     def fetch_question_by_id(self, id):
         """ Serialize tuple into dictionary """
-        cur.execute("SELECT * FROM users WHERE id = %s;", (id,))
+        cur.execute("SELECT * FROM questions WHERE id = %s;", (id,))
         question = cur.fetchone()
         return self.question_serialiser(question)
 
