@@ -1,46 +1,77 @@
 import uuid
 from flask import jsonify, session
+import re
+import psycopg2
+from datetime import date, datetime
+from connect import conn
+from passlib.hash import sha256_crypt
+cur = conn.cursor()
 
 class Question(object):
-    def __init__(self):
-        """ Initialize empty questions list"""  
-        self.question_list = []
-        self.answer_list = []
+    def __init__(self, title=None, body=None): 
+        super(Question, self).__init__()
+        self.title = title
+        self.body = body
 
-    def create(self, title, body):
+    def save(self):
+        conn.commit()
+
+    def create(self):
         """Create questions"""
-        self.questions = {}
+        cur.execute(
+                """
+                INSERT INTO questions (title, body)
+                VALUES (%s, %s) RETURNING id;
+                """,
+                (self.title, self.body))
+            """fetch the new question, pick the id, and assign to questionid"""
+            questionid = cur.fetchone()[0]
+            """save question"""
+            self.save()
+            return jsonify({"message": "Successful", "question": self.question_by_id(questionid)}), 201
         
-        self.quiz_id = len(self.question_list)
-        self.questions['title'] = title
-        self.questions['body'] = body
-        self.questions['userid'] = session['userid']
-        self.questions['postedBy'] = session['username']
-        self.questions['questionid'] = self.quiz_id + 1
-        self.question_list.append(self.questions)
-        return jsonify({"message": "Successful.", "question":self.question_list}), 201        
+    def get_all_questions(self):
+        """retrieve all users"""
+        cur.execute("SELECT * FROM questions")
+        """fetch all questions using cursor and assign results to questions_tuple"""
+        questions_tuple = cur.fetchall()
+        questions = []
 
-    def get_question(self):
-       """ get questions """
-       return jsonify({"Questions": self.question_list}), 200
+        for question in questions_tuple:
+            """append questions after serializing to the list"""
+            questions.append(self.serializer(question))
+        return jsonify({"QUestions": questions})
 
-    def get_question_by_id(self, id):
-        for question in self.question_list:
-            if question['questionid'] == id:
-                ans = [answ for answ in self.answer_list if answ['qid'] == id]
-                return jsonify({"Question":question, "Answer": ans})
-            return jsonify("Question with that id does not exist.")
-        return jsonify("Question with that id does not exist.")
 
-    def add_answer(self, qid, comment, upvote=0, downvote=0):
-        self.answer = {}
-       
-        self.id = len(self.answer)
-        self.answer['id'] = self.id + 1
-        self.answer['qid'] = qid
-        self.answer['answerdBy'] = session['username']
-        self.answer['comment'] = comment
-        self.answer['upvote'] = upvote
-        self.answer['downvote'] = downvote
-        self.answer_list.append(self.answer)
-        return jsonify(self.answer)
+    def get_question_by_title(self, title):
+        """retrieve a specific question"""
+        cur.execute(
+            "SELECT * FROM questions where title=%s", (title))
+        question = cur.fetchone()
+        if question:
+            return self.serializer(question)
+        return False
+
+    def serializer(self, question):
+        return dict(
+            id=question[0],
+            title=question[1],
+            body=question[2]
+        )
+
+    def serialiser_question(self, question):
+        """ Serialize tuple into dictionary """
+        print()
+        question_details = dict(
+            id=question[0],
+            title=question[1],
+            body=question[2],
+        )
+        return question_details
+
+    def question_by_id(self, id):
+        """ Serialize tuple into dictionary """
+        cur.execute("SELECT * FROM users WHERE id = %s;", (id,))
+        user = cur.fetchone()
+
+    return self.serialiser_question(question)
