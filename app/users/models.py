@@ -29,7 +29,7 @@ class User(object):
                 INSERT INTO users (username, email, password)
                 VALUES (%s, %s, %s) RETURNING id;
                 """,
-                (self.username, self.email, hash_pass))
+                (self.username, self.email, hash_pass))e
             """fetch the new user, pick the id, and assign to userid"""
             userid = cur.fetchone()[0]
             """save user"""
