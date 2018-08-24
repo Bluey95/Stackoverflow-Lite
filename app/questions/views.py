@@ -1,6 +1,6 @@
 from flask import Flask, request, flash, redirect, url_for, jsonify, session, abort, render_template, g
 from . import api
-from .models import Question
+from .models import Question, Answer
 from app.users.models import User
 from app.jwtfile import Jwt_details
 questionObject = Question() 
@@ -93,7 +93,7 @@ def question_id(id):
     if item is False:
         return jsonify({"message": "The request doesnt exist"}), 404
     else:
-        return jsonify(item), 200
+        return item, 200
 
 @api.route('/questions/<int:id>', methods=["DELETE"])
 def admin_delete(id):
@@ -118,9 +118,8 @@ def admin_delete(id):
 def answer(qid):
 
     """ Method to create and retrieve questions."""
-    if 'username' in session:
-        data = request.get_json()
-        comment = data['comment']
-        res = questionObject.add_answer(qid, comment)
-        return res
-    return jsonify({"message": "Please login to answer a question."})
+    data = request.get_json()
+    body = data['body']
+    ans = Answer(body, qid)
+    res = ans.create()
+    return res

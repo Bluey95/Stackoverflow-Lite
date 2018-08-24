@@ -54,13 +54,14 @@ class TestViews(unittest.TestCase):
         """
         Test users can retrieve a specific question
         """     
-        self.client.post('/api/v2/questions', data=self.question, headers=self.headers)                                                               
+        res = self.client.post('/api/v2/questions', data=self.question, headers=self.headers)   
+        print(res)                                                            
         resource = self.client.get('/api/v2/questions/1', data = self.question, headers=self.headers)
         data = json.loads(resource.data.decode())
         print(data)
         self.assertEqual(resource.content_type, 'application/json')
         self.assertEqual(resource.status_code, 200)
-        self.assertEqual(data['title'], "Blue chronicles")
+        self.assertEqual(data['Question']['title'], "Blue chronicles")
 
     def test_missing_title(self):
         """"
