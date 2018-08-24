@@ -62,6 +62,7 @@ def question():
     data = questionObject.get_all_questions()
     return data
 
+
 @api.route('/questions/<int:id>', methods=["GET", "PUT"])
 def question_id(id):
     """ Method to retrieve and update a specific question."""
@@ -93,6 +94,24 @@ def question_id(id):
         return jsonify({"message": "The request doesnt exist"}), 404
     else:
         return jsonify(item), 200
+
+@api.route('/questions/<int:id>', methods=["DELETE"])
+def admin_delete(id):
+    """ endpoint to delete questions"""
+    question_exist = questionObject.fetch_question_by_id(id)
+    if not question_exist:
+        return jsonify(response="Question does not exist"), 404
+    else:
+        if questionObject.is_owner(id, g.userid) is False:
+            return jsonify({"message": "Sorry you have no permission to delete this question"}), 401
+        else:
+            try:
+                resp = questionObject.delete(id)
+                return jsonify(response=resp), 200
+            except Exception as error:
+                # an error occured when trying to update request
+                response = {'message': str(error)}
+                return jsonify(response), 401
 
 
 @api.route('/questions/<int:qid>/answer', methods=["POST"])

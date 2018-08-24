@@ -77,3 +77,9 @@ class Question(object):
         item = self.fetch_question_by_id(question_id)
         self.save()
         return item
+
+    def delete(self, question_id):
+        cur.execute(
+            "DELETE FROM questions WHERE id=%s", (question_id, ))
+        self.save()
+        return "Deleted Successfully"
