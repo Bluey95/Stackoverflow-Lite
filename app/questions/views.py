@@ -62,11 +62,37 @@ def question():
     data = questionObject.get_all_questions()
     return data
 
-@api.route('/questions/<int:id>', methods=["GET", "POST"])
+@api.route('/questions/<int:id>', methods=["GET", "PUT"])
 def question_id(id):
-    """ Method to create and retrieve a specific question."""
-    data = questionObject.get_question_by_id(id)
-    return data
+    """ Method to retrieve and update a specific question."""
+    if request.method == 'PUT':
+        data = request.get_json()
+        check_details = validate_data(data)
+        if check_details is not "valid":
+            return jsonify({"message": check_details}), 400
+        else:
+            if questionObject.fetch_question_by_id(id) is False:
+                return jsonify({"message": "The Question with that ID doesnt exist"}), 404
+            else:
+                if questionObject.is_owner(id, g.userid) is False:
+                    return jsonify({"message": "Sorry you cant edit this request"}), 401
+                else:
+                    try:
+                        title = data['title']
+                        body = data['body']
+                        req = Question(title, body)
+                        res = req.update(id)
+                        return jsonify({"message": "Update succesfful", "response": res}), 201
+                    except Exception as error:
+                        # an error occured when trying to update request
+                        response = {'message': str(error)}
+                        return jsonify(response), 401
+
+    item = questionObject.fetch_question_by_id(id)
+    if item is False:
+        return jsonify({"message": "The request doesnt exist"}), 404
+    else:
+        return jsonify(item), 200
 
 
 @api.route('/questions/<int:qid>/answer', methods=["POST"])

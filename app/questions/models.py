@@ -58,5 +58,22 @@ class Question(object):
         """ Serialize tuple into dictionary """
         cur.execute("SELECT * FROM questions WHERE id = %s;", (id,))
         question = cur.fetchone()
-        return self.question_serialiser(question)
+        if question:
+            return self.question_serialiser(question)
+        return False
+    
+    def is_owner(self, question_id, userid):
+        """To check if question belong to the user"""
+        cur.execute(
+            "SELECT * FROM questions WHERE id=%s", (question_id, ))
+        request_tuple = cur.fetchone()
+        if request_tuple[4] == userid:
+            return True
+        return False
 
+    def update(self, question_id):
+        cur.execute("UPDATE questions SET title = %s, body = %s, created_by = %s, user_id = %s WHERE id = %s;", (self.title, self.body, g.username, g.userid, question_id)
+        )
+        item = self.fetch_question_by_id(question_id)
+        self.save()
+        return item
