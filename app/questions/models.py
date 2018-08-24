@@ -29,7 +29,7 @@ class Question(object):
         questionid = cur.fetchone()[0]
         """save question"""
         self.save()
-        return jsonify({"message": "Successful", "question": self.fetch_question_by_id(questionid)}), 201
+        return jsonify({"message": "Successful", "question": self.fetch_by_id(questionid)}), 201
     
     def get_all_questions(self):
         """retrieve all users"""
@@ -53,6 +53,14 @@ class Question(object):
             user_id=question[4]
         )
         return question_details
+
+    def fetch_by_id(self, id):
+        """ Serialize tuple into dictionary """
+        cur.execute("SELECT * FROM questions WHERE id = %s;", (id,))
+        question = cur.fetchone()
+        if question:
+            return self.question_serialiser(question)
+        return False
 
     def fetch_question_by_id(self, id):
         """ Serialize tuple into dictionary """
