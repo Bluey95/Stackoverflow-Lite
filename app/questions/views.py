@@ -59,7 +59,7 @@ def question():
             response = question.create()
             return response
         return jsonify({"message":res}), 422
-    data = questionObject.get_question()
+    data = questionObject.get_all_questions()
     return data
 
 @api.route('/questions/<int:id>', methods=["GET", "POST"])
