@@ -1,4 +1,4 @@
-from flask import Flask, request, flash, redirect, url_for, jsonify, abort, render_template, g
+from flask import Flask, request, flash, redirect, url_for, jsonify, abort, render_template, g, json
 from . import user_api
 from .models import User
 import re
@@ -17,7 +17,7 @@ def before_request():
                 auth_header = request.headers.get('authorization')
                 g.user = None
                 access_token = auth_header.split(" ")[1]
-                res = jwt_obj.decode_auth_token(access_token)
+                res = jwt_obj.decode_auth_token(access_token).decode('utf-8')
                 if isinstance(res, int) and not jwt_obj.is_blacklisted(access_token):
                     # check if no error in string format was returned
                     # find the user with the id on the token
@@ -30,7 +30,7 @@ def before_request():
                 return jsonify({"message": "Please register or login to continue"}), 401
         except Exception:
 
-            return jsonify({"message": "Authorization header or access itoken is missng."}), 400
+            return jsonify({"message": "Authorization header or access token is missng."}), 400
 
 
 def validate_data(data):
@@ -79,7 +79,7 @@ def login():
         user = userObject.get_user_by_username(user_details['username'])
         if user and userObject.verify_password(user_details['password'], user['password']):
             auth_token = jwt_obj.generate_auth_token(user["id"])
-            return jsonify({"user": user, "message": "Login Successfull.", "Access_token": auth_token}), 201
+            return json.dumps({"user": user, "message": "Login Successfull.", "Access_token": auth_token}), 201
         else:
             # no user found, return an error message
             response = {'message': 'invalid username or password, Please try again'}
