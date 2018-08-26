@@ -1,4 +1,5 @@
 from flask import jsonify, g
+import json
 import re
 import psycopg2
 from datetime import date, datetime
@@ -68,7 +69,6 @@ class Question(object):
         question = cur.fetchone()
         ans = Answer()
         answers = ans.fetch_answers_by_question_id(id)
-        print(answers)
         if question:
             return jsonify({"Question":self.question_serialiser(question), "Answers":answers})
         return False
@@ -109,12 +109,13 @@ class Answer(object):
         answered_by = g.username
         user_id = g.userid
         question_id = self.question_id
+        is_accepted = False
         cur.execute(
                 """
-                INSERT INTO answers (body, answered_by, user_id, question_id)
-                VALUES (%s, %s, %s, %s) RETURNING id;
+                INSERT INTO answers (body, answered_by, user_id, question_id, is_accepted)
+                VALUES (%s, %s, %s, %s, %s) RETURNING id;
                 """,
-                (self.body, answered_by, user_id, self.question_id))
+                (self.body, answered_by, user_id, self.question_id, is_accepted))
         """fetch the new Answer, pick the id, and assign to questionid"""
         questionid = cur.fetchone()[0]
         """save Answer"""
@@ -135,6 +136,64 @@ class Answer(object):
             return answers
         return answers_tuple
 
+    def fetch_answer_by_id(self, id):
+        """ Serialize tuple into dictionary """
+        cur.execute("SELECT * FROM answers WHERE id = %s;", (id,))
+        answer = cur.fetchone()
+        if answer:
+            return jsonify({"Answer":self.answers_serialiser(answer)})
+        return False
+
+    def fetch_answer(self, id):
+        """ Serialize tuple into dictionary """
+        cur.execute("SELECT * FROM answers WHERE id = %s;", (id,))
+        answer = cur.fetchone()
+        if answer:
+            return answer
+        return False
+
+    def is_owner(self, answer_id, userid):
+        """To check if answer belong to the user"""
+        cur.execute(
+            "SELECT * FROM answers WHERE id=%s", (answer_id, ))
+        request_tuple = cur.fetchone()
+        if request_tuple[4] == userid:
+            return True
+        return False
+
+    def update(self, answer_id):
+        res = self.fetch_answer(answer_id)
+        if res:
+            is_accepted = False
+            question_id = res[3]
+            cur.execute("UPDATE answers SET body = %s, answered_by = %s, user_id = %s, question_id = %s, is_accepted = %s WHERE id = %s;", (self.body, g.username, g.userid, question_id, is_accepted, answer_id)
+            )
+            item = self.fetch_answer(answer_id)
+            self.save()
+            return jsonify({"message": "Update succesfful", "response": self.answers_serialiser(item)}), 201
+        return jsonify({"message": "Sorry the answer with this id doesnt exist."}), 404
+
+    def delete(self, question_id):
+        cur.execute(
+            "DELETE FROM questions WHERE id=%s", (question_id, ))
+        self.save()
+        return "Deleted Successfully"
+
+    def accept(self, answer_id):
+        res = self.fetch_answer(answer_id)
+        if res:
+            is_accepted = True
+            question_id = res[3]
+            user_id = res[4]
+            body = res[1]
+            answered_by = res[2]
+            cur.execute("UPDATE answers SET body = %s, answered_by = %s, user_id = %s, question_id = %s, is_accepted = %s WHERE id = %s;", (body, answered_by, user_id, question_id, is_accepted, answer_id)
+            )
+            item = self.fetch_answer(answer_id)
+            self.save()
+            return jsonify({"message": "Update succesfful", "response": self.answers_serialiser(item)}), 201
+        return jsonify({"message": "Sorry the answer with this id doesnt exist."}), 404
+
     def answers_serialiser(self, answer):
         """ Serialize tuple into dictionary """
         answer_details = dict(
@@ -142,6 +201,7 @@ class Answer(object):
             question_id=answer[3],
             body=answer[1],
             answered_by=answer[2],
-            user_id=answer[4]
+            user_id=answer[4],
+            is_accepted=answer[5]
         )
         return answer_details

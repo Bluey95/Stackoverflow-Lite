@@ -3,7 +3,8 @@ from . import api
 from .models import Question, Answer
 from app.users.models import User
 from app.jwtfile import Jwt_details
-questionObject = Question() 
+questionObject = Question()
+answerObject = Answer() 
 jwt_obj = Jwt_details()
 
 @api.before_app_request
@@ -123,3 +124,23 @@ def answer(qid):
     ans = Answer(body, qid)
     res = ans.create()
     return res
+
+@api.route('/questions/<int:id>/answer/<int:ansid>', methods=["GET","PUT"])
+def mark(id, ansid):
+
+    """ Method to create a mark."""
+    if request.method == "PUT": 
+        if questionObject.is_owner(id, g.userid) is True:
+            res = answerObject.accept(ansid)
+            return res
+        elif answerObject.is_owner(ansid, g.userid) is True:
+            data = request.get_json()
+            body = data['body']
+            req = Answer(body)
+            res = req.update(ansid)
+            return res
+        return jsonify({"message": "Sorry you are not allowed to update this answer."})
+    response = answerObject.fetch_answer_by_id(ansid)
+    return response
+
+
