@@ -143,4 +143,10 @@ def mark(id, ansid):
     response = answerObject.fetch_answer_by_id(ansid)
     return response
 
+@api.route('/questions/myquestions')
+def myquestions():
+    """ Method to retrieve a specific user's questions."""
+    item = questionObject.fetch_question_by_userid(g.userid)
+    return item, 200
+
 

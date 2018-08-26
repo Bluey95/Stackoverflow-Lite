@@ -72,6 +72,19 @@ class Question(object):
         if question:
             return jsonify({"Question":self.question_serialiser(question), "Answers":answers})
         return False
+
+    def fetch_question_by_userid(self, id):
+        """ Serialize tuple into dictionary """
+        cur.execute("SELECT * FROM questions WHERE user_id = %s;", (id,))
+        questions_tuple = cur.fetchall()
+        questions = []
+        
+        if len(questions_tuple) > 0:
+            for question in questions_tuple:
+                """append questions after serializing to the list"""
+                questions.append(self.question_serialiser(question))
+            return jsonify({"Question":questions})
+        return jsonify({"Message":"You have not posted any questions"})
     
     def is_owner(self, question_id, userid):
         """To check if question belong to the user"""
