@@ -10,13 +10,12 @@ services:
   
 before_script:
 - psql -c 'create database testdb;' -U postgres
-- migrate.py
+- python migrate.py
   
 install: 
   - pip install -r requirements.txt
   - pip install coveralls
   - pip install flask
-  - python migrate.py
 
 script: nosetests --with-coverage --cover-package=app && coverage report
 
