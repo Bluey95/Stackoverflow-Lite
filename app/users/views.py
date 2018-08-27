@@ -80,7 +80,7 @@ def login():
         if user and userObject.verify_password(user_details['password'], user['password']):
             auth_token = jwt_obj.generate_auth_token(user["id"])
             return jsonify({"user": user, "message": "Login Successfull.", "Access_token":auth_token}), 201
-            
+
         else:
             response = {'message': 'invalid username or password, Please try again'}
             return jsonify(response), 401
