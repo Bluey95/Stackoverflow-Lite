@@ -36,6 +36,8 @@ def validate_data(data):
         # check if title more than 10 characters
         if len(data['title'].strip()) == 0:
             return "Title cannot be empty"
+        elif not re.match("^[a-zA-Z0-9-]*$", data['title']):
+            return ("Your title should only be valid")
         elif len(data['body'].strip()) == 0:
             return "Question body cannot be empty"
         elif len(data['title'].strip()) < 5:
@@ -143,10 +145,29 @@ def mark(id, ansid):
     response = answerObject.fetch_answer_by_id(ansid)
     return response
 
+@api.route('/questions/<int:id>/answer/<int:ansid>/upvote', methods=["POST"])
+def upvote_answer(id, ansid):
+
+    """ Method to upvote."""
+    request.method == "POST"
+    data = request.get_json()
+    res = answerObject.upvote(ansid)
+    return res
+
+@api.route('/questions/<int:id>/answer/<int:ansid>/downvote', methods=["POST"])
+def downvote_answer(id, ansid):
+
+    """ Method to downvote."""
+    request.method == "POST"
+    data = request.get_json()
+    res = answerObject.downvote(ansid)
+    return res
+
 @api.route('/questions/myquestions')
 def myquestions():
     """ Method to retrieve a specific user's questions."""
     item = questionObject.fetch_question_by_userid(g.userid)
     return item, 200
 
+    
 
