@@ -40,7 +40,7 @@ def create_blacklist_tokens():
     cur.execute("CREATE TABLE blacklist_tokens(id serial PRIMARY KEY, token varchar,\
         blacklisted_on date);")
     conn.commit()
-    print("Table blacklist_tokens Successfullyn Created")
+    print("Table blacklist_tokens Successfully Created")
 
 create_users_table()
 create_questions_table()
