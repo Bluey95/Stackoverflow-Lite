@@ -26,7 +26,7 @@ def create_answers_table():
     # Create answers table
     cur.execute("DROP TABLE IF EXISTS answers")
     cur.execute("CREATE TABLE answers(id serial PRIMARY KEY, body varchar, \
-    answered_by varchar, question_id integer, user_id integer, is_accepted varchar);")
+    answered_by varchar, question_id integer, user_id integer, is_accepted varchar, votes integer);")
     
     print("Table Answers Successfully Created")
     conn.commit()
