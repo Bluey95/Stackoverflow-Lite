@@ -3,6 +3,7 @@ from . import api
 from .models import Question, Answer
 from app.users.models import User
 from app.jwtfile import Jwt_details
+import re
 questionObject = Question()
 answerObject = Answer() 
 jwt_obj = Jwt_details()
@@ -36,8 +37,6 @@ def validate_data(data):
         # check if title more than 10 characters
         if len(data['title'].strip()) == 0:
             return "Title cannot be empty"
-        elif not re.match("^[a-zA-Z0-9-]*$", data['title']):
-            return ("Your title should only be valid")
         elif len(data['body'].strip()) == 0:
             return "Question body cannot be empty"
         elif len(data['title'].strip()) < 5:

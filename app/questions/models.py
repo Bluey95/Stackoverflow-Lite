@@ -235,8 +235,8 @@ class Answer(object):
             body = res[1]
             answered_by = res[2]
             cur.execute("UPDATE answers SET body = %s, answered_by = %s, user_id = %s, \
-                question_id = %s, is_accepted = %s, upvote = %s, downvote = %s WHERE id = %s;", \
-                (body, answered_by, user_id, question_id, is_accepted, self.upvotes, self.downvotes, answer_id)
+                question_id = %s, is_accepted = %s, votes = %s WHERE id = %s;", \
+                (body, answered_by, user_id, question_id, is_accepted, self.votes, answer_id)
             )
             item = self.fetch_answer(answer_id)
             self.save()
