@@ -84,7 +84,8 @@ def question_id(id):
                         body = data['body']
                         req = Question(title, body)
                         res = req.update(id)
-                        return jsonify({"message": "Update succesfful", "response": str(res)}), 201
+                        print(res._dict_)
+                        return jsonify({"message": "Update succesfful", "response": res._dict_}), 201
                     except Exception as error:
                         # an error occured when trying to update request
                         response = {'message': str(error)}
