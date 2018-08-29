@@ -104,7 +104,7 @@ class TestViews(unittest.TestCase):
         Test for login
         """
         # Login the user
-        resource = self.client.post('api/v2/auth/login', data=json.dumps(dict(username="Bluey", 
+        resource = self.client.post('api/v2/auth/login', data=json.dumps(dict(username="tests", 
                             password='pass123')), content_type='application/json')
 
         data = json.loads(resource.data.decode())
