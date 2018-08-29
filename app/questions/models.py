@@ -243,6 +243,16 @@ class Answer(object):
             return jsonify({"message": "Update succesfful", "response": self.answers_serialiser(item)}), 201
         return jsonify({"message": "Sorry the answer with this id doesnt exist."}), 404
 
+    def question_with_most_answers(self):
+        cur.execute(
+            "SELECT MAX(question_id), COUNT (question_id) FROM answers GROUP BY question_id")
+        res = cur.fetchall()
+        most_question_list = []
+        for item in res:
+            most_question_list.append({"question_id":item[0], "no. of answers":item[1]})
+        return jsonify({"Questions":most_question_list})
+
+
     def answers_serialiser(self, answer):
         """ Serialize tuple into dictionary """
         answer_details = dict(

@@ -166,7 +166,12 @@ def downvote_answer(id, ansid):
 def myquestions():
     """ Method to retrieve a specific user's questions."""
     item = questionObject.fetch_question_by_userid(g.userid)
-    return item, 200
+    return item.data, 200
 
+@api.route('/questions/mostanswers', methods=["GET"])
+def most_answers():
+    """ Method to retrieve question with most answers."""
+    response = answerObject.question_with_most_answers()
+    return response
     
 
