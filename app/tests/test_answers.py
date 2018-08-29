@@ -12,13 +12,14 @@ class TestViews(unittest.TestCase):
         app = create_app(config_name)
         self.client = app.test_client()
         self.question = json.dumps(dict(title="Blue chronicles", body="Why blue is awesome?"))
-        self.register_user = json.dumps(dict(username="susan", email="susan@info.co", password='pass123',
+        self.register_user = json.dumps(dict(username="susan", email="susanwere15@gmail.com", password='pass123',
                     confirmpass='pass123'))
         self.client.post('api/v2/auth/registration',
                 data = self.register_user, content_type='application/json')
         resource = self.client.post('api/v2/auth/login', data=json.dumps(dict(username="susan", password='pass123'
                                                                                  )), content_type='application/json')
         response = json.loads(resource.data.decode())
+        print(response)
         access_token = response["Access_token"]
         Authorization='Bearer ' + access_token
         self.headers = {'content-type': 'application/json','Authorization': Authorization}

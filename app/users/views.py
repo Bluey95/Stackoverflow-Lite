@@ -1,8 +1,9 @@
-from flask import Flask, request, flash, redirect, url_for, jsonify, abort, render_template, g, json
+from flask import Flask, request, flash, redirect, url_for, jsonify, abort, render_template, g, json, make_response
 from . import user_api
 from .models import User
 import re
 from app.jwtfile import Jwt_details
+
 
 userObject = User() 
 jwt_obj = Jwt_details()
@@ -41,8 +42,8 @@ def validate_data(data):
             return "username must be more than 3 characters"
         elif not re.match("^[A-Za-z]*$", data['username']):
             return ("Your username should only contain letters")
-        elif not re.match("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+[a-zA-Z0-9-.]+.[a-zA-Z0-9-.]$", data['email'].strip()):
-            return "please provide a valid email"
+        elif not User.validate_user_email(data['email']):
+            return "Please provide a valid email"
         # check if password has space
         elif " " in data["password"]:
             return "password should be one word, no spaces"
@@ -60,16 +61,21 @@ def validate_data(data):
 def reg():
     """ Method to create user account."""
     if request.method == "POST":
-        data = request.get_json()
-        res = validate_data(data)
-        if res == "valid":
-            email = data['email']
-            username = data['username']
-            password = data['password']
-            user = User(username, email, password)
-            response = user.create()
-            return response
-        return jsonify({"message":res}), 400
+        try: 
+            data = request.get_json()
+            res = validate_data(data)
+            if res == "valid":
+                email = data['email']
+                username = data['username']
+                password = data['password']
+                user = User(username, email, password)
+                new_user = user.create()
+                return new_user
+            else:
+                return jsonify({"message": res}), 422
+        except Exception:
+            return jsonify({"message": "bad json object"}), 400
+
 
 
 @user_api.route('/login', methods=["POST"])
@@ -82,7 +88,8 @@ def login():
         if user and userObject.verify_password(user_details['password'], user['password']):
             auth_token = jwt_obj.generate_auth_token(user["id"])
             auth_token = str(auth_token)
-            return jsonify({"user": user, "message": "Login Successfull.", "Access_token":auth_token}), 201
+            return jsonify({"user": user, "message": "Login Successfull.", 
+                    "Access_token":auth_token}), 201
 
         else:
             response = {'message': 'invalid username or password, Please try again'}

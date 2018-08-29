@@ -5,6 +5,7 @@ import psycopg2
 from datetime import date, datetime
 from connect import conn
 from passlib.hash import sha256_crypt
+from email_validator import validate_email, EmailNotValidError
 cur = conn.cursor()
 
 class User(object):
@@ -21,7 +22,7 @@ class User(object):
     def create(self):
         """Create users"""
         if self.username_exist(self.username) is False:
-            if self.get_user_by_email(self.email) is False:
+            if self.email_exists(self.email) is False:
                 """hash the password"""
                 hash_pass = self.hash_password(self.password)
                 """call cursor to read INSERT query"""
@@ -33,11 +34,12 @@ class User(object):
                     (self.username, self.email, hash_pass))
                 """fetch the new user, pick the id, and assign to userid"""
                 userid = cur.fetchone()[0]
+                print(userid)
                 """save user"""
                 self.save()
                 return jsonify({"message": "Successful", "user": self.user_by_id(userid)}), 201
-            return jsonify({"message": "Email is already taken."}), 400
-        return jsonify({"message": "Username is taken."}), 400
+            return jsonify({"message": "Email is already taken."}), 409
+        return jsonify({"message": "Username is taken."}), 409
 
     def get_all_users(self):
         """retrieve all users"""
@@ -83,8 +85,15 @@ class User(object):
         user = cur.fetchone()
         if user:
             return True
-        else:
-            return False
+        return False
+
+    def email_exists(self, email):
+        """ check if user with the same username already exist """
+        cur.execute("SELECT * FROM users WHERE email = %s;", (email,))
+        user = cur.fetchone()
+        if user:
+            return True
+        return False
 
     def hash_password(self, password):
         """Hash Password """
@@ -95,6 +104,18 @@ class User(object):
         """ Verify Password"""
         h_pass = sha256_crypt.verify(password, h_pass)
         return h_pass
+
+    @staticmethod
+    def validate_user_email(email):
+        try:
+            is_valid = validate_email(email)
+            email = is_valid["email"]
+            print(email)
+            return True
+        except EmailNotValidError as e:
+            print(e)
+            return False
+
 
     def serialiser_user(self, user):
         """ Serialize tuple into dictionary """
