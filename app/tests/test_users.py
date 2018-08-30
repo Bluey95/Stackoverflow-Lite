@@ -42,7 +42,7 @@ class TestViews(unittest.TestCase):
                     password='Pa12', confirmpass='Pa12')), content_type='application/json')
 
         data = json.loads(resource.data.decode())
-        self.assertEqual(resource.status_code, 400)
+        self.assertEqual(resource.status_code, 422)
         self.assertEqual(resource.content_type, 'application/json')
         self.assertEqual(data['message'], 'Password should have atleast 5 characters')
 
@@ -54,7 +54,7 @@ class TestViews(unittest.TestCase):
                         content_type='application/json')
 
         data = json.loads(resource.data.decode())
-        self.assertEqual(resource.status_code, 400)
+        self.assertEqual(resource.status_code, 422)
         self.assertEqual(resource.content_type, 'application/json')
         self.assertEqual(data['message'], 'Make sure your password has a number in it')
 
@@ -64,7 +64,7 @@ class TestViews(unittest.TestCase):
                                                                                  )), content_type='application/json')
 
         data = json.loads(resource.data.decode())
-        self.assertEqual(resource.status_code, 400)
+        self.assertEqual(resource.status_code, 422)
         self.assertEqual(resource.content_type, 'application/json')
         self.assertEqual(data['message'], 'passwords do not match')
 
@@ -74,7 +74,7 @@ class TestViews(unittest.TestCase):
                                                                                  )), content_type='application/json')
 
         data = json.loads(resource.data.decode())
-        self.assertEqual(resource.status_code, 400)
+        self.assertEqual(resource.status_code, 422)
         self.assertEqual(resource.content_type, 'application/json')
         self.assertEqual(data['message'], 'username must be more than 3 characters')
 
@@ -84,7 +84,7 @@ class TestViews(unittest.TestCase):
                                                                                  )), content_type='application/json')
 
         data = json.loads(resource.data.decode())
-        self.assertEqual(resource.status_code, 400)
+        self.assertEqual(resource.status_code, 422)
         self.assertEqual(resource.content_type, 'application/json')
         self.assertEqual(data['message'], 'please provide a valid email')
 

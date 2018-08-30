@@ -96,7 +96,8 @@ class Question(object):
         return False
 
     def update(self, question_id):
-        cur.execute("UPDATE questions SET title = %s, body = %s, created_by = %s, user_id = %s WHERE id = %s;", (self.title, self.body, g.username, g.userid, question_id)
+        cur.execute("UPDATE questions SET title = %s, body = %s, created_by = %s, user_id = %s \
+                WHERE id = %s;", (self.title, self.body, g.username, g.userid, question_id)
         )
         item = self.fetch_question_by_id(question_id)
         self.save()
@@ -109,10 +110,11 @@ class Question(object):
         return "Deleted Successfully"
 
 class Answer(object):
-    def __init__(self, body=None, question_id=None): 
+    def __init__(self, body=None, question_id=None, votes=None): 
         super(Answer, self).__init__()
         self.body = body
         self.question_id = question_id
+        self.votes = 0
 
     def save(self):
         conn.commit()
@@ -125,10 +127,10 @@ class Answer(object):
         is_accepted = False
         cur.execute(
                 """
-                INSERT INTO answers (body, answered_by, user_id, question_id, is_accepted)
-                VALUES (%s, %s, %s, %s, %s) RETURNING id;
+                INSERT INTO answers (body, answered_by, user_id, question_id, is_accepted, votes)
+                VALUES (%s, %s, %s, %s, %s, %s) RETURNING id;
                 """,
-                (self.body, answered_by, user_id, self.question_id, is_accepted))
+            (self.body, answered_by, user_id, self.question_id, is_accepted, self.votes))
         """fetch the new Answer, pick the id, and assign to questionid"""
         questionid = cur.fetchone()[0]
         """save Answer"""
@@ -179,8 +181,10 @@ class Answer(object):
         if res:
             is_accepted = False
             question_id = res[3]
-            cur.execute("UPDATE answers SET body = %s, answered_by = %s, user_id = %s, question_id = %s, is_accepted = %s WHERE id = %s;", (self.body, g.username, g.userid, question_id, is_accepted, answer_id)
-            )
+            cur.execute("UPDATE answers SET body = %s, answered_by = %s, user_id = %s, \
+            question_id = %s, is_accepted = %s, votes = %s WHERE id = %s;", 
+                (self.body, g.username, g.userid, question_id, is_accepted, self.votes, answer_id)
+)
             item = self.fetch_answer(answer_id)
             self.save()
             return jsonify({"message": "Update succesfful", "response": self.answers_serialiser(item)}), 201
@@ -189,6 +193,12 @@ class Answer(object):
     def delete(self, question_id):
         cur.execute(
             "DELETE FROM questions WHERE id=%s", (question_id, ))
+        self.save()
+        return "Deleted Successfully"
+
+    def delete_answer(self, answer_id):
+        cur.execute(
+            "DELETE FROM answers WHERE id=%s", (answer_id, ))
         self.save()
         return "Deleted Successfully"
 
@@ -201,11 +211,37 @@ class Answer(object):
             body = res[1]
             answered_by = res[2]
             cur.execute("UPDATE answers SET body = %s, answered_by = %s, user_id = %s, \
-                    question_id = %s, is_accepted = %s WHERE id = %s;", (body, answered_by, user_id, question_id, is_accepted, answer_id)
+                    question_id = %s, is_accepted = %s WHERE id = %s;", (body, answered_by, 
+                        user_id, question_id, is_accepted, answer_id)
             )
             item = self.fetch_answer(answer_id)
             self.save()
-            return jsonify({"message": "Update succesfful", "response": self.answers_serialiser(item)}), 201
+            return jsonify({"message": "Update succesfful", 
+                "response": self.answers_serialiser(item)}), 201
+        return jsonify({"message": "Sorry the answer with this id doesnt exist."}), 404
+
+    def upvote(self, answer_id):
+        res = self.fetch_answer(answer_id)
+        if res:
+            upvote = res[6] + 1
+            question_id = res[3]
+            cur.execute("UPDATE answers SET votes = %s WHERE id = %s;", (upvote, answer_id))
+            item = self.fetch_answer(answer_id)
+            self.save()
+            return jsonify({"message": "Upvote successful"}), 201
+        return jsonify({"message": "Sorry the answer with this id doesnt exist."}), 404
+
+    def downvote(self, answer_id):
+        res = self.fetch_answer(answer_id)
+        if res:
+            if res[6] > 0:
+                downvote = res[6] - 1
+                question_id = res[3]
+                cur.execute("UPDATE votes = %s WHERE id = %s;", (downvote, answer_id))
+                item = self.fetch_answer(answer_id)
+                self.save()
+                return jsonify({"message": "downvote successful"}), 201
+            return jsonify({"message": "The votes are at minimum"}), 200
         return jsonify({"message": "Sorry the answer with this id doesnt exist."}), 404
 
     def answers_serialiser(self, answer):
@@ -216,6 +252,7 @@ class Answer(object):
             body=answer[1],
             answered_by=answer[2],
             user_id=answer[4],
-            is_accepted=answer[5]
+            is_accepted=answer[5],
+            votes=answer[6]
         )
         return answer_details

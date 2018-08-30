@@ -29,7 +29,6 @@ def before_request():
                     return
                 return jsonify({"message": "Please register or login to continue"}), 401
         except Exception:
-
             return jsonify({"message": "Authorization header or access token is missng."}), 400
 
 
@@ -64,45 +63,58 @@ def validate_data(data):
 def reg():
     """ Method to create user account."""
     if request.method == "POST":
-        data = request.get_json()
-        res = validate_data(data)
-        if res == "valid":
-            email = data['email']
-            username = data['username']
-            password = data['password']
-            user = User(username, email, password)
-            response = user.create()
-            return response
-        return jsonify({"message":res}), 400
+        try: 
+            data = request.get_json()
+            res = validate_data(data)
+            if res == "valid":
+                email = data['email']
+                username = data['username']
+                password = data['password']
+                user = User(username, email, password)
+                new_user = user.create()
+                return new_user
+            else:
+                return jsonify({"message": res}), 422
+        except Exception:
+            return jsonify({"message": "bad json object"}), 400
 
 
 @user_api.route('/login', methods=["POST"])
 def login():
     """ Method to login user """
-    user_details = request.get_json()
-    
     try:
-        user = userObject.get_user_by_username(user_details['username'])
-        if user and userObject.verify_password(user_details['password'], user['password']):
-            auth_token = jwt_obj.generate_auth_token(user["id"])
-            auth_token = str(auth_token)
-            return jsonify({"user": user, "message": "Login Successfull.", "Access_token":auth_token}), 201
+        user_details = request.get_json()
+        
+        try:
+            user = userObject.get_user_by_username(user_details['username'])
+            if user and userObject.verify_password(user_details['password'], user['password']):
+                auth_token = jwt_obj.generate_auth_token(user["id"])
+                auth_token = str(auth_token)
+                return jsonify({"user": user, "message": "Login Successfull.", "Access_token":auth_token}), 201
 
-        else:
-            response = {'message': 'invalid username or password, Please try again'}
+            else:
+                response = {'message': 'invalid username or password, Please try again'}
+                return jsonify(response), 401
+        except Exception:
+            response = {'message': str(error)}
             return jsonify(response), 401
-    except Exception as error:
-        response = {'message': str(error)}
-        return jsonify(response), 401
+    except Exception:
+        return jsonify({"message": "bad json object"}), 400
 
 @user_api.route('/users', methods=["GET"])    
 def users():
-    if request.method == "GET":
-        data = userObject.get_user()
-        return jsonify({"Users" : data})
+    try:
+        if request.method == "GET":
+            data = userObject.get_user()
+            return jsonify({"Users" : data})
+    except Exception:
+        return jsonify({"message": "bad json object"}), 400
 
 @user_api.route('/users/<int:id>', methods=["GET", "POST"])
 def user_id(id):
     """ Method to create and retrieve a specific user."""
-    data = userObject.get_specific_user(id)
-    return data
+    try:
+        data = userObject.get_specific_user(id)
+        return data
+    except Exception:
+        return jsonify({"message": "bad json object"}), 400

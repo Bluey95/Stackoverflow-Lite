@@ -66,51 +66,126 @@ def validate_answers_data(data):
 @api.route('/questions', methods=["GET", "POST"])
 def question():
     """ Method to create and retrieve questions."""
-    if request.method == "POST":
-        data = request.get_json()
-        res = validate_data(data)
-        if res == "valid":
-            title = data['title']
-            body = data['body']
-            question = Question(title, body)
-            response = question.create()
-            return response
-        return jsonify({"message":res}), 422
-    data = questionObject.get_all_questions()
-    return data
-
+    try:
+        if request.method == "POST":
+            data = request.get_json()
+            res = validate_data(data)
+            if res == "valid":
+                title = data['title']
+                body = data['body']
+                question = Question(title, body)
+                response = question.create()
+                return response
+            return jsonify({"message":res}), 422
+        data = questionObject.get_all_questions()
+        return data
+    except Exception:
+        return jsonify({"message": "Bad JSON object"}), 400
 
 @api.route('/questions/<int:id>', methods=["GET", "PUT"])
 def question_id(id):
     """ Method to retrieve and update a specific question."""
     if request.method == 'PUT':
-        data = request.get_json()
-        check_details = validate_data(data)
-        if check_details is not "valid":
-            return jsonify({"message": check_details}), 400
-        else:
-            if questionObject.fetch_question_by_id(id) is False:
-                return jsonify({"message": "The Question with that ID doesnt exist"}), 404
+        try:
+            data = request.get_json()
+            check_details = validate_data(data)
+            if check_details is not "valid":
+                return jsonify({"message": check_details}), 400
             else:
-                if questionObject.is_owner(id, g.userid) is False:
-                    return jsonify({"message": "Sorry you cant edit this request"}), 401
+                if questionObject.fetch_question_by_id(id) is False:
+                    return jsonify({"message": "The Question with that ID doesnt exist"}), 404
                 else:
-                    try:
-                        title = data['title']
-                        body = data['body']
-                        req = Question(title, body)
-                        res = req.update(id)
-                        return jsonify({"message": "Update succesfful"}), 201
-                    except Exception as error:
-                        # an error occured when trying to update request
-                        response = {'message': str(error)}
-                        return jsonify(response), 401
+                    if questionObject.is_owner(id, g.userid) is False:
+                        return jsonify({"message": "Sorry you cant edit this request"}), 401
+                    else:
+                        try:
+                            title = data['title']
+                            body = data['body']
+                            req = Question(title, body)
+                            res = req.update(id)
+                            return jsonify({"message": "Update succesfful"}), 201
+                        except Exception as error:
+                            # an error occured when trying to update request
+                            response = {'message': str(error)}
+                            return jsonify(response), 401
+        except Exception:
+            return jsonify({"message": "Bad JSON object"}), 400
+
 
     item = questionObject.fetch_question_by_id(id)
     if item is False:
         return jsonify({"message": "The question with the specified id does not exist"}), 404
     else:
         return item, 200
+
+@api.route('/questions/<int:qid>/answer', methods=["POST"])
+def answer(qid):
+
+    """ Method to create and retrieve questions."""
+    try:
+        data = request.get_json()
+        if questionObject.fetch_question_by_id(qid) is False:
+            return jsonify({"message": "The Question with that ID doesnt exist"}), 404
+        res = validate_answers_data(data)
+        if res == "valid":
+            body = data['body']
+            ans = Answer(body, qid)
+            res = ans.create()
+            return res
+        return jsonify({"message":res}), 422
+    except Exception:
+        return jsonify({"message": "Bad JSON object"}), 400
+
+
+@api.route('/questions/<int:id>/answer/<int:ansid>', methods=["GET","PUT"])
+def mark(id, ansid):
+
+    """ Method to create a mark."""
+    if request.method == "PUT": 
+        try:
+            if questionObject.fetch_question_by_id(id) is False:
+                return jsonify({"message": "The Question with that ID doesnt exist"}), 404
+            if questionObject.is_owner(id, g.userid) is True:
+                res = answerObject.accept(ansid)
+                return res
+            elif answerObject.is_owner(ansid, g.userid) is True:
+                data = request.get_json()
+                res = validate_answers_data(data)
+                if res == "valid":
+                    body = data['body']
+                    req = Answer(body)
+                    res = req.update(ansid)
+                    return res
+                return jsonify({"message":res}), 422
+            return jsonify({"message": "Sorry you are not allowed to update this answer."})
+        except Exception:
+            return jsonify({"message": "Bad JSON object"}), 400
+
+    response = answerObject.fetch_answer_by_id(ansid)
+    return response
+
+@api.route('/questions/<int:id>/answer/<int:ansid>/upvote', methods=["PUT"])
+def upvote_answer(id, ansid):
+
+    """ Method to upvote."""
+    request.method == "POST"
+    if questionObject.fetch_question_by_id(id) is False:
+        return jsonify({"message": "The Question with that ID doesnt exist"}), 404
+    data = request.get_json()
+    res = answerObject.upvote(ansid)
+    return res
+
+@api.route('/questions/<int:id>/answer/<int:ansid>/downvote', methods=["PUT"])
+def downvote_answer(id, ansid):
+
+    """ Method to downvote."""
+    if questionObject.fetch_question_by_id(id) is False:
+        return jsonify({"message": "The Question with that ID doesnt exist"}), 404
+    request.method == "POST"
+    data = request.get_json()
+    res = answerObject.downvote(ansid)
+    return res
+
 
 @api.route('/questions/<int:id>', methods=["DELETE"])
 def admin_delete(id):
@@ -130,40 +205,25 @@ def admin_delete(id):
                 response = {'message': str(error)}
                 return jsonify(response), 401
 
+@api.route('/questions/<int:id>/answer/<int:ansid>', methods=["DELETE"])
+def admin_delete_answer(id, ansid):
+    """ endpoint to delete answers"""
+    question_exist = questionObject.fetch_question_by_id(id)
+    if not question_exist:
+        return jsonify(response="Question does not exist"), 404
+    else:
+        answer_exist = answerObject.fetch_answer_by_id(ansid)
+        if answerObject.is_owner(id, g.userid) is False:
+            return jsonify({"message": "Sorry you have no permission to delete this answer"}), 401
+        else:
+            try:
+                resp = answerObject.delete(ansid)
+                return jsonify(response=resp), 200
+            except Exception as error:
+                # an error occured when trying to update request
+                response = {'message': str(error)}
+                return jsonify(response), 401
 
-@api.route('/questions/<int:qid>/answer', methods=["POST"])
-def answer(qid):
-
-    """ Method to create and retrieve questions."""
-    data = request.get_json()
-    res = validate_answers_data(data)
-    if res == "valid":
-        body = data['body']
-        ans = Answer(body, qid)
-        res = ans.create()
-        return res
-    return jsonify({"message":res}), 422
-
-@api.route('/questions/<int:id>/answer/<int:ansid>', methods=["GET","PUT"])
-def mark(id, ansid):
-
-    """ Method to create a mark."""
-    if request.method == "PUT": 
-        if questionObject.is_owner(id, g.userid) is True:
-            res = answerObject.accept(ansid)
-            return res
-        elif answerObject.is_owner(ansid, g.userid) is True:
-            data = request.get_json()
-            res = validate_answers_data(data)
-            if res == "valid":
-                body = data['body']
-                req = Answer(body)
-                res = req.update(ansid)
-                return res
-            return jsonify({"message":res}), 422
-        return jsonify({"message": "Sorry you are not allowed to update this answer."})
-    response = answerObject.fetch_answer_by_id(ansid)
-    return response
 
 @api.route('/questions/myquestions')
 def myquestions():

@@ -11,7 +11,7 @@ class TestViews(unittest.TestCase):
         config_name = 'testing'
         app = create_app(config_name)
         self.client = app.test_client()
-        self.question = json.dumps(dict(title="chronicles", body="Why blue is awesome?"))
+        self.question = json.dumps(dict(id = 1, title="chronicles", body="Why blue is awesome?"))
         self.register_user = json.dumps(dict(username="susan", email="susan@info.co", 
                                     password='Pass123', confirmpass='Pass123'))
         self.client.post('api/v2/auth/registration',
@@ -56,6 +56,7 @@ class TestViews(unittest.TestCase):
         """"
         Test for missing answer body
         """
+        self.client.post('/api/v2/questions', data=self.question, headers=self.headers)
         resource = self.client.post('api/v2/questions/1/answer', data=json.dumps(dict(body=" ")), 
                             headers=self.headers)
         data = json.loads(resource.data.decode())
@@ -65,6 +66,9 @@ class TestViews(unittest.TestCase):
 
     def test_body_should_have__atleast_10_characters(self):
         """ Test for invalid password """
+        self.client.post('/api/v2/questions', data=self.question, headers=self.headers)
+        self.question = json.dumps(dict(id = 1, title="chronicles", body="Why blue is awesome?"))
+        resource = self.client.post('api/v2/questions/', data=self.question, headers=self.headers)
         resource = self.client.post('api/v2/questions/1/answer', data=json.dumps(dict(body="chrons")), 
                             headers=self.headers)
 
