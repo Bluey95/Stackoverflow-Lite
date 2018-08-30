@@ -39,11 +39,17 @@ def validate_data(data):
         # check if the username is more than 3 characters
         if len(data['username'].strip()) < 3:
             return "username must be more than 3 characters"
-        elif not re.match("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+[a-zA-Z0-9-.]+$", data['email'].strip()):
+        elif not re.match("^[A-Za-z]*$", data['username']):
+            return ("Your username should only contain letters")
+        elif not re.match("[^@]+@[^@]+\.[^@]+", data['email'].strip()):
             return "please provide a valid email"
         # check if password has space
         elif " " in data["password"]:
             return "password should be one word, no spaces"
+        elif re.search('[0-9]', data["password"]) is None:
+            return "Make sure your password has a number in it"
+        elif re.search('[A-Z]',data["password"]) is None: 
+            return "Make sure your password has a capital letter in it"
         elif len(data['password'].strip()) < 5:
             return "Password should have atleast 5 characters"
         # check if the passwords match

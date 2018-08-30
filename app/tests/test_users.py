@@ -12,8 +12,8 @@ class TestViews(unittest.TestCase):
         # pass in test configurations
         config_name = 'testing'
         app = create_app(config_name)
-        self.register_user = json.dumps(dict(username="tests", email="susan@gmail.com", password='pass123',
-                    confirmpass='pass123'))
+        self.register_user = json.dumps(dict(username="tests", email="susan@gmail.com", 
+                password='Pass123', confirmpass='Pass123'))
 
         self.client = app.test_client()
         self.client.post('api/v2/auth/registration',
@@ -26,8 +26,8 @@ class TestViews(unittest.TestCase):
     def test_registration(self):
         """ Test for user registration """
         resource = self.client.post('api/v2/auth/registration',
-                data = json.dumps(dict(username="test", email="susans@gmail.com", password='pass123',
-                    confirmpass='pass123')), content_type='application/json')
+                data = json.dumps(dict(username="test", email="susan15@gmail.com", password='Pass123',
+                    confirmpass='Pass123')), content_type='application/json')
 
         data = json.loads(resource.data.decode())
         print(data)
@@ -35,19 +35,32 @@ class TestViews(unittest.TestCase):
         self.assertEqual(resource.content_type, 'application/json')
         self.assertEqual(data['message'], 'Successful')
 
-    def test_invalid_password(self):
+    def test_password_should_have__atleast_five_characters(self):
         """ Test for invalid password """
         resource = self.client.post('api/v2/auth/registration',
-                data=json.dumps(dict(username="test", email="susan@gmail.com", password='pas', confirmpass='pas')), content_type='application/json')
+                data=json.dumps(dict(username="test", email="susan@gmail.com", 
+                    password='Pa12', confirmpass='Pa12')), content_type='application/json')
 
         data = json.loads(resource.data.decode())
         self.assertEqual(resource.status_code, 400)
         self.assertEqual(resource.content_type, 'application/json')
         self.assertEqual(data['message'], 'Password should have atleast 5 characters')
 
+    def test_password_should_contain_numbers(self):
+        """ Test for invalid password """
+        resource = self.client.post('api/v2/auth/registration',
+                data=json.dumps(dict(username="test", email="susan@gmail.com", 
+                    password='password', confirmpass='Password')), 
+                        content_type='application/json')
+
+        data = json.loads(resource.data.decode())
+        self.assertEqual(resource.status_code, 400)
+        self.assertEqual(resource.content_type, 'application/json')
+        self.assertEqual(data['message'], 'Make sure your password has a number in it')
+
     def test_not_matching_password(self):
         """ Test for not matching password """
-        resource = self.client.post('api/v2/auth/registration', data=json.dumps(dict(username="test", email="susan@gmail.com", password='pass123', confirmpass='pass1234'
+        resource = self.client.post('api/v2/auth/registration', data=json.dumps(dict(username="test", email="susan@gmail.com", password='Pass123', confirmpass='Pass1234'
                                                                                  )), content_type='application/json')
 
         data = json.loads(resource.data.decode())
@@ -57,7 +70,7 @@ class TestViews(unittest.TestCase):
 
     def test_valid_username(self):
         """ Test for valid usernames """
-        resource = self.client.post('api/v2/auth/registration', data=json.dumps(dict(username="te", email="susan@gmail.com", password='pass123', confirmpass='pass1234'
+        resource = self.client.post('api/v2/auth/registration', data=json.dumps(dict(username="te", email="susan@gmail.com", password='Pass123', confirmpass='Pass1234'
                                                                                  )), content_type='application/json')
 
         data = json.loads(resource.data.decode())
@@ -67,7 +80,7 @@ class TestViews(unittest.TestCase):
 
     def test_valid_email(self):
         """ Test for valid email """
-        resource = self.client.post('api/v2/auth/registration', data=json.dumps(dict(username="test", email="susan", password='pass123', confirmpass='pass1234'
+        resource = self.client.post('api/v2/auth/registration', data=json.dumps(dict(username="test", email="susan", password='Pass123', confirmpass='Pass1234'
                                                                                  )), content_type='application/json')
 
         data = json.loads(resource.data.decode())
@@ -77,7 +90,7 @@ class TestViews(unittest.TestCase):
 
     def test_for_existing_email(self):
         """ Test for existing email. """
-        resource = self.client.post('api/v2/auth/registration', data=json.dumps(dict(username="test", email="susan@gmail.com", password='pass123', confirmpass='pass123'
+        resource = self.client.post('api/v2/auth/registration', data=json.dumps(dict(username="test", email="susan@gmail.com", password='Pass123', confirmpass='Pass123'
                                                                                  )), content_type='application/json')
 
         data = json.loads(resource.data.decode())
@@ -90,8 +103,8 @@ class TestViews(unittest.TestCase):
         Test for login
         """
         # Login the user
-        resource = self.client.post('api/v2/auth/login', data=json.dumps(dict(username="tests", password='pass123'
-                                                                                 )), content_type='application/json')
+        resource = self.client.post('api/v2/auth/login', data=json.dumps(dict(username="tests", 
+                        password='Pass123')), content_type='application/json')
 
         data = json.loads(resource.data.decode())
         print(data)

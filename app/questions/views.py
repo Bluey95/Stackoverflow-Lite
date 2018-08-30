@@ -1,6 +1,7 @@
 from flask import Flask, request, flash, redirect, url_for, jsonify, session, abort, render_template, g
 from . import api
 from .models import Question, Answer
+import re
 from app.users.models import User
 from app.jwtfile import Jwt_details
 questionObject = Question()
@@ -36,12 +37,27 @@ def validate_data(data):
         # check if title more than 10 characters
         if len(data['title'].strip()) == 0:
             return "Title cannot be empty"
+        elif not re.match("^[A-Za-z]*$", data['title']):
+            return ("Invalid title. Your title should only contain letters")
         elif len(data['body'].strip()) == 0:
             return "Question body cannot be empty"
         elif len(data['title'].strip()) < 5:
             return "Title Must Be more than 5 characters"
         elif len(data['body'].strip()) < 10:
-            return "Body must be more than 10 letters"
+            return "Try to be more descriptive."
+        else:
+            return "valid"
+    except Exception as error:
+        return "please provide all the fields, missing " + str(error)
+
+def validate_answers_data(data):
+    """validate request details"""
+    try:
+        # check if title more than 10 characters
+        if len(data['body'].strip()) == 0:
+            return "Answer body cannot be empty"
+        elif len(data['body'].strip()) < 10:
+            return "Try to be more descriptive."
         else:
             return "valid"
     except Exception as error:
@@ -92,7 +108,7 @@ def question_id(id):
 
     item = questionObject.fetch_question_by_id(id)
     if item is False:
-        return jsonify({"message": "The request doesnt exist"}), 404
+        return jsonify({"message": "The question with the specified id does not exist"}), 404
     else:
         return item, 200
 
@@ -120,10 +136,13 @@ def answer(qid):
 
     """ Method to create and retrieve questions."""
     data = request.get_json()
-    body = data['body']
-    ans = Answer(body, qid)
-    res = ans.create()
-    return res
+    res = validate_answers_data(data)
+    if res == "valid":
+        body = data['body']
+        ans = Answer(body, qid)
+        res = ans.create()
+        return res
+    return jsonify({"message":res}), 422
 
 @api.route('/questions/<int:id>/answer/<int:ansid>', methods=["GET","PUT"])
 def mark(id, ansid):
@@ -135,10 +154,13 @@ def mark(id, ansid):
             return res
         elif answerObject.is_owner(ansid, g.userid) is True:
             data = request.get_json()
-            body = data['body']
-            req = Answer(body)
-            res = req.update(ansid)
-            return res
+            res = validate_answers_data(data)
+            if res == "valid":
+                body = data['body']
+                req = Answer(body)
+                res = req.update(ansid)
+                return res
+            return jsonify({"message":res}), 422
         return jsonify({"message": "Sorry you are not allowed to update this answer."})
     response = answerObject.fetch_answer_by_id(ansid)
     return response

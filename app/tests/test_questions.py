@@ -13,13 +13,13 @@ class TestViews(unittest.TestCase):
         config_name = 'testing'
         app = create_app(config_name)
         self.client = app.test_client()
-        self.question = json.dumps(dict(title="Blue chronicles", body="Why blue is awesome?"))
-        self.register_user = json.dumps(dict(username="susan", email="susan@info.co", password='pass123',
-                    confirmpass='pass123'))
+        self.question = json.dumps(dict(title="chronicles", body="Why blue is awesome?"))
+        self.register_user = json.dumps(dict(username="tests", email="susan@gmail.com", 
+                password='Pass123', confirmpass='Pass123'))
         self.client.post('api/v2/auth/registration',
                 data = self.register_user, content_type='application/json')
-        resource = self.client.post('api/v2/auth/login', data=json.dumps(dict(username="susan", password='pass123'
-                                                                                 )), content_type='application/json')
+        resource = self.client.post('api/v2/auth/login', data=json.dumps(dict(username="tests", 
+                        password='Pass123')), content_type='application/json')
         response = json.loads(resource.data.decode())
         access_token = response["Access_token"]
         Authorization='Bearer ' + access_token
@@ -32,8 +32,8 @@ class TestViews(unittest.TestCase):
         """
         Test users can post questions
         """
-
         resource = self.client.post('/api/v2/questions', data=self.question, headers=self.headers)
+        print(resource)
         data = json.loads(resource.data.decode())
         self.assertEqual(resource.content_type, 'application/json')
         self.assertEqual(resource.status_code, 201)
@@ -44,11 +44,12 @@ class TestViews(unittest.TestCase):
         Test users can retrieve all questions
         """
         self.client.post('/api/v2/questions', data=self.question, headers=self.headers)                                                                                                                       # Retrieve Questions
-        resource = self.client.get('/api/v2/questions', data = self.question, headers=self.headers)
+        resource = self.client.get('/api/v2/questions', data = self.question, 
+                        headers=self.headers)
         data = json.loads(resource.data.decode())
         self.assertEqual(resource.content_type, 'application/json')
         self.assertEqual(resource.status_code, 200)
-        self.assertEqual(len(data['Questions']), 1)
+        self.assertEqual(len(data), 1)
 
     def test_retrieve_specific_question(self):
         """
@@ -58,16 +59,16 @@ class TestViews(unittest.TestCase):
         print(res)                                                            
         resource = self.client.get('/api/v2/questions/1', data = self.question, headers=self.headers)
         data = json.loads(resource.data.decode())
-        print(data)
         self.assertEqual(resource.content_type, 'application/json')
         self.assertEqual(resource.status_code, 200)
-        self.assertEqual(data['Question']['title'], "Blue chronicles")
+        self.assertEqual(data['Question']['title'], "chronicles")
 
     def test_missing_title(self):
         """"
         Test for missing title
         """
-        resource = self.client.post('api/v2/questions', data=json.dumps(dict(title="", body="Why blue is awesome?")), headers=self.headers)
+        resource = self.client.post('api/v2/questions', data=json.dumps(dict(title="", 
+                        body="Why blue is awesome?")), headers=self.headers)
         data = json.loads(resource.data.decode())
         self.assertEqual(resource.status_code, 422)
         self.assertEqual(resource.content_type, 'application/json')
@@ -75,13 +76,43 @@ class TestViews(unittest.TestCase):
 
     def test_missing_question_body(self):
         """"
-        Test for wrong login credentials
+        Test for missing question body
         """
         resource = self.client.post('api/v2/questions', data=json.dumps(dict(title="titles", body="")), headers=self.headers)
         data = json.loads(resource.data.decode())
         self.assertEqual(resource.status_code, 422)
         self.assertEqual(resource.content_type, 'application/json')
         self.assertEqual(data['message'].strip(), 'Question body cannot be empty')
+
+    def test_title_should_only_contain_letters(self):
+        """ Test that title should only contain letters """
+        resource = self.client.post('api/v2/questions', data=json.dumps(dict(title="12vbkerue;", 
+                        body="Why blue is awesome?")), headers=self.headers)
+
+        data = json.loads(resource.data.decode())
+        self.assertEqual(resource.status_code, 422)
+        self.assertEqual(resource.content_type, 'application/json')
+        self.assertEqual(data['message'], 'Invalid title. Your title should only contain letters')
+
+    def test_title_should_be_more_than_five_characters(self):
+        """ Test that title should be more than five characters """
+        resource = self.client.post('api/v2/questions', data=json.dumps(dict(title="titl;", 
+                        body="Why blue is awesome?")), headers=self.headers)
+
+        data = json.loads(resource.data.decode())
+        self.assertEqual(resource.status_code, 422)
+        self.assertEqual(resource.content_type, 'application/json')
+        self.assertEqual(data['message'], 'Title Must Be more than 5 characters')
+
+    def test_title_should_be_more_than_five_characters(self):
+        """ Test that title should have more than ten characters """
+        resource = self.client.post('api/v2/questions', data=json.dumps(dict(title="titles", 
+                        body="awesome?")), headers=self.headers)
+
+        data = json.loads(resource.data.decode())
+        self.assertEqual(resource.status_code, 422)
+        self.assertEqual(resource.content_type, 'application/json')
+        self.assertEqual(data['message'], 'Try to be more descriptive.')
 
 
 if __name__ == '__main__':
