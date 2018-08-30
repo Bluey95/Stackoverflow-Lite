@@ -237,7 +237,7 @@ class Answer(object):
             if res[6] > 0:
                 downvote = res[6] - 1
                 question_id = res[3]
-                cur.execute("UPDATE votes = %s WHERE id = %s;", (downvote, answer_id))
+                cur.execute("UPDATE answers SET votes = %s WHERE id = %s;", (downvote, answer_id))
                 item = self.fetch_answer(answer_id)
                 self.save()
                 return jsonify({"message": "downvote successful"}), 201

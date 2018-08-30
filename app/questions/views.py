@@ -170,21 +170,29 @@ def upvote_answer(id, ansid):
     """ Method to upvote."""
     request.method == "POST"
     if questionObject.fetch_question_by_id(id) is False:
-        return jsonify({"message": "The Question with that ID doesnt exist"}), 404
-    data = request.get_json()
-    res = answerObject.upvote(ansid)
-    return res
+        return jsonify({"message": "The Question with that ID doesn't exist"}), 404
+    if answerObject.fetch_answer_by_id(ansid) is False:
+        return jsonify({"message": "The Answer with that ID doesn't exist"}), 404
+    if answerObject.is_owner(ansid, g.userid) is False:
+        data = request.get_json()
+        res = answerObject.upvote(ansid)
+        return res
+    return jsonify({"message": "You are not allowed to vote on your own answer"})
 
 @api.route('/questions/<int:id>/answer/<int:ansid>/downvote', methods=["PUT"])
 def downvote_answer(id, ansid):
 
     """ Method to downvote."""
     if questionObject.fetch_question_by_id(id) is False:
-        return jsonify({"message": "The Question with that ID doesnt exist"}), 404
-    request.method == "POST"
-    data = request.get_json()
-    res = answerObject.downvote(ansid)
-    return res
+        return jsonify({"message": "The Question with that ID doesn't exist"}), 404
+    if answerObject.fetch_answer_by_id(ansid) is False:
+        return jsonify({"message": "The Answer with that ID doesn't exist"}), 404
+    if answerObject.is_owner(ansid, g.userid) is False:
+        request.method == "POST"
+        data = request.get_json()
+        res = answerObject.downvote(ansid)
+        return res
+    return jsonify({"message": "Are you really trying to downvote your own answer?"})
 
 
 @api.route('/questions/<int:id>', methods=["DELETE"])
@@ -213,7 +221,7 @@ def admin_delete_answer(id, ansid):
         return jsonify(response="Question does not exist"), 404
     else:
         answer_exist = answerObject.fetch_answer_by_id(ansid)
-        if answerObject.is_owner(id, g.userid) is False:
+        if answerObject.is_owner(ansid, g.userid) is False:
             return jsonify({"message": "Sorry you have no permission to delete this answer"}), 401
         else:
             try:
