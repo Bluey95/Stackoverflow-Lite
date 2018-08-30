@@ -1,5 +1,7 @@
 venv/
-*.pyc 
+*.pyc
+*~
+*.swp
 .pytest_cache/
 .vscode/
 .env
