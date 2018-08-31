@@ -194,6 +194,11 @@ def downvote_answer(id, ansid):
         return res
     return jsonify({"message": "Are you really trying to downvote your own answer?"})
 
+@api.route('/questions/mostanswers', methods=["GET"])
+def most_answers():
+    """ Method to retrieve question with most answers."""
+    response = answerObject.question_with_most_answers()
+    return response
 
 @api.route('/questions/<int:id>', methods=["DELETE"])
 def admin_delete(id):
