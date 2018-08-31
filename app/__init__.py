@@ -28,16 +28,14 @@ def create_app(config_name):
     API_PATH_PREFIX = '/api/'
     API_PATH_INDEX = '/'
 
-    # @app.errorhandler(404)
-    # def page_not_found_error(error):
-    #     if request.path.startswith(API_PATH_PREFIX):
-    #         return jsonify({'error': True, 'msg': 'API endpoint {!r} does not exist on this server'.format(request.path)}), error.code
-    #     return render_template('err_{}.html'.format(error.code)), error.code
+    @app.errorhandler(404)
+    def page_not_found_error(error):
+        if request.path.startswith(API_PATH_PREFIX):
+            return jsonify({'error': True, 'msg': 'API endpoint {!r} does not exist on this server'.format(request.path)}), error.code
 
-    # @app.errorhandler(405)
-    # def method_not_allowed_error(error):
-    #     if request.path.startswith(API_PATH_INDEX):
-    #         return jsonify({'error': True, 'msg': 'Please use the valid api urls'.format(request.path)}), error.code
-    #     return render_template('err_{}.html'.format(error.code)), error.code
+    @app.errorhandler(405)
+    def method_not_allowed_error(error):
+        if request.path.startswith(API_PATH_INDEX):
+            return jsonify({'error': True, 'msg': 'Please use the valid api urls'.format(request.path)}), error.code
 
     return app
