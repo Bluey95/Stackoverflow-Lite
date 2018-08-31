@@ -20,7 +20,7 @@ class Jwt_details(object):
             # create the byte string token using the payload and the SECRET key
             jwt_string = jwt.encode(
                 payload,
-                "itsasecret",
+                current_app.config.get('SECRET_KEY'),
                 algorithm='HS256'
             )
             return jwt_string
