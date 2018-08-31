@@ -39,6 +39,20 @@ class TestViews(unittest.TestCase):
         self.assertEqual(resource.status_code, 201)
         self.assertEqual(data["Answers"][0]['body'], "its pretty")
 
+    def test_delete_answer(self):
+        """
+        Test users can post answers
+        """
+        self.client.post('/api/v2/questions', data=self.question, headers=self.headers)
+        resource = self.client.post('/api/v2/questions/1/answer', data=json.dumps(dict(
+                            body="its pretty", id=1)), headers=self.headers)
+        data = json.loads(resource.data.decode())
+        print(data)
+        resource = self.client.delete('/api/v2/questions/1/answer/1', data=json.dumps(dict(
+                            body="its pretty")), headers=self.headers)
+        self.assertEqual(resource.content_type, 'application/json')
+        self.assertEqual(resource.status_code, 200)
+
     def test_retrieve_answers(self):
         """
         Test users can retrieve all answers belonging to a question
