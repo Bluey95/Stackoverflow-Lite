@@ -39,10 +39,10 @@ def validate_data(data):
             return "Title cannot be empty"
         elif not re.match("^[A-Za-z]*$", data['title']):
             return ("Invalid title. Your title should only contain letters")
+        elif " " in data['title']:
+            return ("Only one key word is allowed.")
         elif len(data['body'].strip()) == 0:
             return "Question body cannot be empty"
-        elif len(data['title'].strip()) < 5:
-            return "Title Must Be more than 5 characters"
         elif len(data['body'].strip()) < 10:
             return "Try to be more descriptive."
         else:
