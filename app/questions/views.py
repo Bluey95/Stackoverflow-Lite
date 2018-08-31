@@ -37,6 +37,8 @@ def validate_data(data):
         # check if title more than 10 characters
         if len(data['title'].strip()) == 0:
             return "Title cannot be empty"
+        elif " " in data['title']:
+            return ("Only one key word is allowed.")
         elif not re.match("^[A-Za-z]*$", data['title']):
             return ("Invalid title. Your title should only contain letters")
         elif " " in data['title']:
