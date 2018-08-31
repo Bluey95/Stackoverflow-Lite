@@ -98,7 +98,7 @@ def question_id(id):
                     return jsonify({"message": "The Question with that ID doesnt exist"}), 404
                 else:
                     if questionObject.is_owner(id, g.userid) is False:
-                        return jsonify({"message": "Sorry you cant edit this request"}), 401
+                        return jsonify({"message": "Sorry you cant edit this question"}), 401
                     else:
                         try:
                             title = data['title']
