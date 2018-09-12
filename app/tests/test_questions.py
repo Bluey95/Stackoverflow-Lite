@@ -13,7 +13,7 @@ class TestViews(unittest.TestCase):
         config_name = 'testing'
         app = create_app(config_name)
         self.client = app.test_client()
-        self.question = json.dumps(dict(title="chronicles", body="Why blue is awesome?"))
+        self.question = json.dumps(dict(id=1, title="chronicles", body="Why blue is awesome?"))
         self.register_user = json.dumps(dict(username="tests", email="susan@gmail.com", 
                 password='Pass123', confirmpass='Pass123'))
         self.client.post('api/v2/auth/registration',
@@ -33,11 +33,21 @@ class TestViews(unittest.TestCase):
         Test users can post questions
         """
         resource = self.client.post('/api/v2/questions', data=self.question, headers=self.headers)
-        print(resource)
         data = json.loads(resource.data.decode())
         self.assertEqual(resource.content_type, 'application/json')
         self.assertEqual(resource.status_code, 201)
         self.assertEqual(data["message"], "Successful")
+
+    def test_delete_question(self):
+        """
+        Test users can delete a question
+        """
+        resource = self.client.post('/api/v2/questions', data=self.question, headers=self.headers)
+        data = json.loads(resource.data.decode())
+        resource = self.client.delete('/api/v2/questions/1', data=self.question, headers=self.headers)
+        self.assertEqual(resource.content_type, 'application/json')
+        self.assertEqual(resource.status_code, 200)
+
 
     def test_retrieve_question(self):
         """
@@ -55,13 +65,22 @@ class TestViews(unittest.TestCase):
         """
         Test users can retrieve a specific question
         """     
-        res = self.client.post('/api/v2/questions', data=self.question, headers=self.headers)   
-        print(res)                                                            
+        res = self.client.post('/api/v2/questions', data=self.question, headers=self.headers)                                                              
         resource = self.client.get('/api/v2/questions/1', data = self.question, headers=self.headers)
         data = json.loads(resource.data.decode())
         self.assertEqual(resource.content_type, 'application/json')
         self.assertEqual(resource.status_code, 200)
         self.assertEqual(data['Question']['title'], "chronicles")
+
+    def test_retrieve_user_questions(self):
+        """
+        Test users can retrieve a specific question
+        """     
+        res = self.client.post('/api/v2/questions', data=self.question, headers=self.headers)                                                               
+        resource = self.client.get('/api/v2/questions/myquestions', data = self.question, headers=self.headers)
+        data = json.loads(resource.data.decode())
+        self.assertEqual(resource.content_type, 'application/json')
+        self.assertEqual(resource.status_code, 200)
 
     def test_missing_title(self):
         """"

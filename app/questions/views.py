@@ -37,12 +37,14 @@ def validate_data(data):
         # check if title more than 10 characters
         if len(data['title'].strip()) == 0:
             return "Title cannot be empty"
+        elif " " in data['title']:
+            return ("Only one key word is allowed.")
         elif not re.match("^[A-Za-z]*$", data['title']):
             return ("Invalid title. Your title should only contain letters")
+        elif " " in data['title']:
+            return ("Only one key word is allowed.")
         elif len(data['body'].strip()) == 0:
             return "Question body cannot be empty"
-        elif len(data['title'].strip()) < 5:
-            return "Title Must Be more than 5 characters"
         elif len(data['body'].strip()) < 10:
             return "Try to be more descriptive."
         else:
@@ -96,7 +98,7 @@ def question_id(id):
                     return jsonify({"message": "The Question with that ID doesnt exist"}), 404
                 else:
                     if questionObject.is_owner(id, g.userid) is False:
-                        return jsonify({"message": "Sorry you cant edit this request"}), 401
+                        return jsonify({"message": "Sorry you cant edit this question"}), 401
                     else:
                         try:
                             title = data['title']

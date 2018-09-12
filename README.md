@@ -27,6 +27,7 @@
 | GET /api/v2/questions<int:id>                | Retrieve a specific posted question and answer |
 | POST /api/v2/questions/<int:id>/answer       | Create an answer to a specific question        |
 | GET /api/v2/questions/myquestions            | Retrieve specific questions posted by a user   |
+| GET /api/v2/questions/mostanswers            | Check for questions with most answers   |
 | PUT /api/v2/questions/<int:id>               | Update a specific posted question              |
 | DELETE /api/v2/questions/<int:id>            | Delete a specific posted question              |
 | PUT /api/v2/questions/<int:id>/answer/<ansid> | Accept a specific answer to a posted question  |
