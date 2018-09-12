@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/Bluey95/Stackoverflow-Lite.svg?branch=develop)](https://travis-ci.org/Bluey95/Stackoverflow-Lite)  [![Coverage Status](https://coveralls.io/repos/github/Bluey95/Stackoverflow-Lite/badge.svg?branch=challenge_three_latest)](https://coveralls.io/github/Bluey95/Stackoverflow-Lite?branch=challenge_three_latest)
+
 ### StackOverflow-lite is a platform where people can ask questions and provide answers. 
 
 1. To view on the browser, visit [here](https://bluey95.github.io/Stackoverflow-Lite/)
