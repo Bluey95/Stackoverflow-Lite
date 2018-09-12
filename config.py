@@ -6,7 +6,7 @@ class Config(object):
 	"""
 
 	DEBUG = True
-	SECRET_KEY = "itsasecret"
+	SECRET_KEY = os.getenv("SECRET")
 
 class DevelopmentConfig(Config):
 	"""
@@ -14,7 +14,6 @@ class DevelopmentConfig(Config):
 	"""
 
 	DEBUG = True
-	SECRET_KEY = "itsasecret"
 
 class ProductionConfig(Config):
 	"""
@@ -22,7 +21,6 @@ class ProductionConfig(Config):
 	"""
 	DEBUG = False
 	TESTING = False
-	SECRET_KEY = "itsasecret"
 
 class TestingConfig(Config):
 	"""
@@ -30,7 +28,6 @@ class TestingConfig(Config):
 	"""
 
 	TESTING = True
-	SECRET_KEY = "itsasecret"
 
 app_config = {
 	'development': DevelopmentConfig,

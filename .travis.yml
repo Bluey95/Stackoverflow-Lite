@@ -1,9 +1,19 @@
 language: python
 
+env:
+  SECRET="anything"
+
 python:
 
   - "2.7.12"
   - "2.7"
+
+services:
+  - postgresql
+  
+before_script:
+- psql -c 'create database testdb;' -U postgres
+- python migrate.py
   
 install: 
   - pip install -r requirements.txt

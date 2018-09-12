@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/Bluey95/Stackoverflow-Lite.svg?branch=develop)](https://travis-ci.org/Bluey95/Stackoverflow-Lite)  [![Coverage Status](https://coveralls.io/repos/github/Bluey95/Stackoverflow-Lite/badge.svg?branch=develop)](https://coveralls.io/github/Bluey95/Stackoverflow-Lite?branch=develop)
+[![Build Status](https://travis-ci.org/Bluey95/Stackoverflow-Lite.svg?branch=develop)](https://travis-ci.org/Bluey95/Stackoverflow-Lite)  [![Coverage Status](https://coveralls.io/repos/github/Bluey95/Stackoverflow-Lite/badge.svg?branch=challenge_three_latest)](https://coveralls.io/github/Bluey95/Stackoverflow-Lite?branch=challenge_three_latest)
 
 ### StackOverflow-lite is a platform where people can ask questions and provide answers. 
 
@@ -13,20 +13,29 @@
 
 
 
-2. To interact with the api endpoints, visit the link [here](https://stackoverflow-lite-api-heroku.herokuapp.com/api/v1/questions)<br>
+2. To interact with the api endpoints, visit the link [here]https://stackoverflowlitev3.herokuapp.com/)<br>
 
 ## Use the following endpoints to perform the specified tasks
 		 
 | 	Endpoint                               | Functionality                                                  
 | ---------------------------------------------| -----------------------------------------------|
-| POST api/v1/auth/registration                | Create a user account                          |          
-| POST /api/v1/auth/login                      | Login a user                                   |
-| GET api/v1/auth/users                        | Retrieve the registered users                  |
-| GET /api/v1/auth/users/<int:id>              | Retrieve a specific registered user            |
-| POST /api/v1/questions                       | Create a question                              |
-| GET /api/v1/questions                        | Retrieve posted questions                      |
-| POST /api/v1/questions/<int:id>/answer       | Create an answer to a specific question        |
-| GET /api/v1/questions/<int:id>               | Retrieve a specific posted question and answer |
+| POST api/v2/auth/registration                | Create a user account                          |          
+| POST /api/v2/auth/login                      | Login a user                                   |
+| GET api/v2/auth/users                        | Retrieve the registered users                  |
+| GET /api/v2/auth/users/<int:id>              | Retrieve a specific registered user            |
+| POST /api/v2/questions                       | Create a question                              |
+| GET /api/v2/questions                        | Retrieve posted questions                      |
+| GET /api/v2/questions<int:id>                | Retrieve a specific posted question and answer |
+| POST /api/v2/questions/<int:id>/answer       | Create an answer to a specific question        |
+| GET /api/v2/questions/myquestions            | Retrieve specific questions posted by a user   |
+| GET /api/v2/questions/mostanswers            | Check for questions with most answers   |
+| PUT /api/v2/questions/<int:id>               | Update a specific posted question              |
+| DELETE /api/v2/questions/<int:id>            | Delete a specific posted question              |
+| PUT /api/v2/questions/<int:id>/answer/<ansid> | Accept a specific answer to a posted question  |
+| PUT /api/v2/questions/<int:id>/answer/<ansid> | Edit a specific answer to a posted question    |
+| DELETE /api/v2/questions/<int:id>/answer/<ansid> | DELETE a specific answer to a posted question  |
+| PUT /api/v2//questions/<int:id>/answer/ansid>/upvote | Upvote an answer to a specific question |
+| PUT /api/v2//questions/<int:id>/answer/ansid>/downvote | Downvote an answer to a specific question |
 		 
 
 ## Application Features
@@ -43,6 +52,9 @@
 * Users can delete the questions they post.
 * Users can post answers.
 * Users can view the answers to questions. 
+* Users can vote for an answer.
+* Users can mark an answer as accepted.
+* Users can delete the answers they post.
 
 ## How to Test Manually
 1. Clone the project to your local machine <br>
