@@ -33,11 +33,6 @@ def create_app(config_name):
         if request.path.startswith(API_PATH_PREFIX):
             return jsonify({'error': True, 'msg': 'API endpoint {!r} does not exist on this server'.format(request.path)}), error.code
 
-    @app.errorhandler(405)
-    def method_not_allowed_error(error):
-        if request.path.startswith(API_PATH_INDEX):
-            return jsonify({'error': True, 'msg': 'Please use the valid api urls'.format(request.path)}), error.code
-
     @app.errorhandler(500)
     def method_not_allowed_error(error):
         if request.path.startswith(API_PATH_INDEX):
