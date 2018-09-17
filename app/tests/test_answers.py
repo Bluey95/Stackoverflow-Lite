@@ -22,6 +22,7 @@ class TestViews(unittest.TestCase):
         access_token = response["Access_token"]
         Authorization='Bearer ' + access_token
         self.headers = {'content-type': 'application/json','Authorization': Authorization}
+        self.headers_for_get = {'content-type': 'application/json'}
         
     def tearDown(self):
         create_questions_table()
@@ -47,7 +48,6 @@ class TestViews(unittest.TestCase):
         resource = self.client.post('/api/v2/questions/1/answer', data=json.dumps(dict(
                             body="its pretty", id=1)), headers=self.headers)
         data = json.loads(resource.data.decode())
-        print(data)
         resource = self.client.delete('/api/v2/questions/1/answer/1', data=json.dumps(dict(
                             body="its pretty")), headers=self.headers)
         self.assertEqual(resource.content_type, 'application/json')
@@ -81,11 +81,10 @@ class TestViews(unittest.TestCase):
     def test_body_should_have__atleast_10_characters(self):
         """ Test for invalid password """
         self.client.post('/api/v2/questions', data=self.question, headers=self.headers)
-        self.question = json.dumps(dict(id = 1, title="chronicles", body="Why blue is awesome?"))
-        resource = self.client.post('api/v2/questions/', data=self.question, headers=self.headers)
+        resource = self.client.post('api/v2/questions', data=self.question, headers=self.headers)
+        
         resource = self.client.post('api/v2/questions/1/answer', data=json.dumps(dict(body="chrons")), 
                             headers=self.headers)
-
         data = json.loads(resource.data.decode())
         self.assertEqual(resource.status_code, 422)
         self.assertEqual(resource.content_type, 'application/json')

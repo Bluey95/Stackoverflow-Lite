@@ -10,7 +10,6 @@
   "app/tests/test_questions.py::TestViews::test_missing_title", 
   "app/tests/test_questions.py::TestViews::test_retrieve_question", 
   "app/tests/test_questions.py::TestViews::test_retrieve_specific_question", 
-  "app/tests/test_questions.py::TestViews::test_retrieve_user_questions", 
   "app/tests/test_questions.py::TestViews::test_title_should_be_more_than_five_characters", 
   "app/tests/test_questions.py::TestViews::test_title_should_only_contain_letters", 
   "app/tests/test_users.py::TestViews::test_for_existing_email", 

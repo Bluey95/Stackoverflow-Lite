@@ -110,10 +110,10 @@ def users():
 
 @user_api.route('/users/<int:id>', methods=["GET"])
 def user_id(id):
-    """ Method to create and retrieve a specific user."""
+    """ Method to retrieve a specific user."""
     try:
         if request.method == "GET":
             data = userObject.user_by_id(id)
-            return data
+            return jsonify({"user": data})
     except Exception:
         return jsonify({"message": "bad json object"}), 400

@@ -110,9 +110,9 @@ class User(object):
         """ Serialize tuple into dictionary """
         cur.execute("SELECT * FROM users WHERE id = %s", (userid,))
         user = cur.fetchone()
-        print(user)
         if user:
-            return jsonify({"user": self.serialiser_user(user)})
+            user = self.serializer(user)
+            return user
         else:
             return False
 
