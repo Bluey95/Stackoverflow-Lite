@@ -14,7 +14,7 @@ def before_request():
     if request.endpoint and 'auth' not in request.url:
 
         try:
-            if request.method != 'OPTIONS':
+            if request.method != 'GET':
                 auth_header = request.headers.get('authorization')
                 g.user = None
                 access_token = auth_header.split(" ")[1]
@@ -240,7 +240,7 @@ def admin_delete_answer(id, ansid):
                 return jsonify(response), 401
 
 
-@api.route('/questions/myquestions')
+@api.route('/questions/myquestions', methods=["GET"])
 def myquestions():
     """ Method to retrieve a specific user's questions."""
     item = questionObject.fetch_question_by_userid(g.userid)

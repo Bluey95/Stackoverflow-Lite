@@ -13,7 +13,7 @@ def before_request():
     if request.endpoint and 'auth' not in request.url:
 
         try:
-            if request.method != 'OPTIONS':
+            if request.method != 'GET':
                 auth_header = request.headers.get('authorization')
                 g.user = None
                 access_token = auth_header.split(" ")[1]
@@ -103,16 +103,17 @@ def login():
 def users():
     try:
         if request.method == "GET":
-            data = userObject.get_user()
-            return jsonify({"Users" : data})
+            data = userObject.get_all_users()
+            return data
     except Exception:
         return jsonify({"message": "bad json object"}), 400
 
-@user_api.route('/users/<int:id>', methods=["GET", "POST"])
+@user_api.route('/users/<int:id>', methods=["GET"])
 def user_id(id):
-    """ Method to create and retrieve a specific user."""
+    """ Method to retrieve a specific user."""
     try:
-        data = userObject.get_specific_user(id)
-        return data
+        if request.method == "GET":
+            data = userObject.user_by_id(id)
+            return jsonify({"user": data})
     except Exception:
         return jsonify({"message": "bad json object"}), 400
