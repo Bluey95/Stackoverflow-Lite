@@ -72,16 +72,6 @@ class TestViews(unittest.TestCase):
         self.assertEqual(resource.status_code, 200)
         self.assertEqual(data['Question']['title'], "chronicles")
 
-    def test_retrieve_user_questions(self):
-        """
-        Test users can retrieve a specific question
-        """     
-        res = self.client.post('/api/v2/questions', data=self.question, headers=self.headers)                                                               
-        resource = self.client.get('/api/v2/questions/myquestions', data = self.question, headers=self.headers)
-        data = json.loads(resource.data.decode())
-        self.assertEqual(resource.content_type, 'application/json')
-        self.assertEqual(resource.status_code, 200)
-
     def test_missing_title(self):
         """"
         Test for missing title
