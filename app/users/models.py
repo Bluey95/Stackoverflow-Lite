@@ -44,11 +44,12 @@ class User(object):
         cur.execute("SELECT * FROM users")
         """fetch all users using cursor and assign results to users_tuple"""
         users_tuple = cur.fetchall()
+        print(users_tuple)
         users = []
 
         for user in users_tuple:
             """append user after serializing to the list"""
-            users.append(self.serializer(user))
+            users.append(self.serialiser_user(user))
         return jsonify({"Users": users})
 
     def get_user_by_username(self, username):
@@ -66,7 +67,7 @@ class User(object):
             "SELECT * FROM users WHERE email=%s", (email,))
         user = cur.fetchone()
         if user:
-            return self.serializer(user)
+            return self.serialiser_user(user)
         return False
 
     def serializer(self, user):
@@ -109,8 +110,9 @@ class User(object):
         """ Serialize tuple into dictionary """
         cur.execute("SELECT * FROM users WHERE id = %s", (userid,))
         user = cur.fetchone()
+        print(user)
         if user:
-            return self.serialiser_user(user)
+            return jsonify({"user": self.serialiser_user(user)})
         else:
             return False
 
