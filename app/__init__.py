@@ -23,6 +23,11 @@ def create_app(config_name):
     app.register_blueprint(api_blueprint, url_prefix='/api/v2/auth')
     cors = CORS(api_blueprint, resources={r"/api/v2/auth*": {"origins": "*"}})
 
+    def options (self):
+        return {'Allow' : 'GET' }, 200, \
+        { 'Access-Control-Allow-Origin': '*', \
+        'Access-Control-Allow-Methods' : 'PUT,GET' }
+
 
     @app.route('/')
     def hello_world():

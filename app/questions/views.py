@@ -105,7 +105,7 @@ def question_id(id):
                             body = data['body']
                             req = Question(title, body)
                             res = req.update(id)
-                            return jsonify({"message": "Update succesfful"}), 201
+                            return jsonify({"message": "Update succesfful"}), 201, {'Access-Control-Allow-Origin': '*'}
                         except Exception as error:
                             # an error occured when trying to update request
                             response = {'message': str(error)}
