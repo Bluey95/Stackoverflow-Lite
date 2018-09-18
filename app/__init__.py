@@ -11,6 +11,7 @@ from config import app_config
 
 def create_app(config_name):
     app = Flask(__name__, instance_relative_config=True)
+    CORS(app)
     app.url_map.strict_slashes = False
     # print(app_config.get('FLASK_CONFIG'))
     # print('*'*123)
@@ -18,11 +19,9 @@ def create_app(config_name):
 
     from .questions import api as api_blueprint
     app.register_blueprint(api_blueprint, url_prefix='/api/v2')
-    CORS(api_blueprint)
 
     from .users import user_api as api_blueprint
     app.register_blueprint(api_blueprint, url_prefix='/api/v2/auth')
-    CORS(api_blueprint)
 
 
     @app.route("/")
