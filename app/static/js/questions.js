@@ -23,9 +23,13 @@ request.onload = function () {
       question.body = question.body.substring(0, 300);
       p.textContent = `${question.body}...`;
 
+      const h3 = document.createElement('h3');
+      h3.textContent = question.created_by;
+
       container.appendChild(card);
       card.appendChild(h1);
       card.appendChild(p);
+      card.appendChild(h3)
     });
   } else {
     const errorMessage = document.createElement('marquee');
