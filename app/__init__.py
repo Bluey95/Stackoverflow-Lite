@@ -17,11 +17,11 @@ def create_app(config_name):
 
     from .questions import api as api_blueprint
     app.register_blueprint(api_blueprint, url_prefix='/api/v2')
-    CORS(api_blueprint)
+    cors = CORS(api_blueprint, resources={r"/api/v2*": {"origins": "*"}})
 
     from .users import user_api as api_blueprint
     app.register_blueprint(api_blueprint, url_prefix='/api/v2/auth')
-    CORS(api_blueprint)
+    cors = CORS(api_blueprint, resources={r"/api/v2/auth*": {"origins": "*"}})
 
 
     @app.route('/')
