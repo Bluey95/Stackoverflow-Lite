@@ -1,6 +1,6 @@
 import os
 from config import app_config
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 # third-party imports
 from flask import Flask, redirect,request, jsonify
@@ -14,6 +14,7 @@ def create_app(config_name):
     # print(app_config.get('FLASK_CONFIG'))
     # print('*'*123)
     app.config.from_object(app_config[os.getenv('FLASK_CONFIG')])
+    app.config['CORS_HEADERS'] = 'Content-Type'
 
     from .questions import api as api_blueprint
     app.register_blueprint(api_blueprint, url_prefix='/api/v2')
