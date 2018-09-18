@@ -5,6 +5,7 @@ import psycopg2
 from datetime import date, datetime
 from connect import conn
 from passlib.hash import sha256_crypt
+from flask_cors import CORS
 cur = conn.cursor()
 
 class User(object):

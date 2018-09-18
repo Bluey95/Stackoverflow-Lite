@@ -3,6 +3,7 @@ from . import user_api
 from .models import User
 import re
 from app.jwtfile import Jwt_details
+from flask_cors import CORS
 
 userObject = User() 
 jwt_obj = Jwt_details()
