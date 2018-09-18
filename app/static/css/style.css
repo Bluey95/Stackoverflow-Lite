@@ -1,0 +1,166 @@
+body{
+	background-color: #cccedf;
+	margin: 0;
+	padding: 0;
+	color: #ffffff;
+}
+
+a{
+	color: #ffffff;
+}
+
+#form{
+	margin: 0 auto;
+	width: 500px;
+	margin-top: 30px;
+
+}
+
+input[type=text]{
+	width: 100%;
+	padding: 12px 20px;
+	margin: 6px 0;
+	display: inline-block;
+	border: 1px solid #000638;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+fieldset{
+	padding: 20px;
+	margin-top: 20px;
+}
+
+legend{
+	border: 1px solid #ffffff;
+	border-radius: 4px;
+	box-sizing: border-box;
+	padding: 10px;
+	background-color: #000638;
+	color: #ffffff;
+}
+
+input[type=submit]{
+	width: 30%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #000638;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+textarea{
+	width: 100%;
+}
+
+.maindiv{
+	margin-top: 20px;
+	background-color: hsla(240, 100%, 25%, 0.1);
+	padding: 20px;
+}
+
+ table{
+	font-family: arial, sans-serif;
+	border-collapse: collapse;
+	width: 100%;
+	border-bottom: 1px solid #000638;
+	background-color: #cccedf;
+	color: #000638;
+}
+
+a td {
+	color: #000638;
+}
+td, th{
+	border: none;
+	text-align: left;
+	padding: 8px;
+	border-bottom: 1px solid #000638;
+
+}
+
+a tr:nth-child(even){
+	background-color: #cccedf
+
+}
+
+th{
+	background-color: #000638;
+	color: #ffffff;
+}
+.navbar{
+	margin: 0;
+	padding: 0;
+}
+
+ul{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: #000638;
+	position: fixed;
+	top: 0;
+	width: 100%;
+}
+
+li{
+	display: inline;
+	float: right;
+}
+
+li a{
+	display: block;
+	color: white;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+}
+
+li a:hover{
+	background-color: #ffffff;
+	color: #000638;
+}
+
+.active{
+	background-color: #cccedf;
+	color:#000638;
+}
+
+.user{
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+	max-width: 300px;
+	margin: auto;
+	text-align: center;
+	margin-top: 40px;
+	padding: 15px;
+	background-color: #ffffff;
+	color: #000638;
+}
+
+.title{
+	color: grey;
+	font-size: 18px;
+}
+
+.summary{
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+	width: 100%;
+	text-align: center;
+	margin-top: 20px;
+}
+
+.collapsible{
+	cursor: pointer;
+}
+
+/*.active, .collapsible:hover{
+background-color: #000638;
+color: #ffffff; 
+}*/
+
+.content{
+	display: none;
+	overflow: hidden;
+}

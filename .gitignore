@@ -1,0 +1,8 @@
+venv/
+*.pyc
+*~
+*.swp
+.pytest_cache/
+.vscode/
+.env
+.coveralls.yml

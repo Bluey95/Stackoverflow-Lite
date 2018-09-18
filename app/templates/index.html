@@ -1,0 +1,63 @@
+<html>
+<head>
+	<title>Questions</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/style.css') }}">
+	<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+	<div class="navbar">
+		<ul>
+			<li style="float: left; color: #ffffff; padding:10px">StackOverflow-Lite</li>
+			<li><a href="signin.html">Signout</a></li>
+			<li><a href="profile.html">Profile</a></li>
+			<li><a href="index.html" class="active">Questions</a></li>
+		
+
+		</ul>
+	</div>
+	<div class="maindiv">
+		<h1>Recently Asked Questions</h1>
+
+		<h4>Sort By
+			<select>
+				<option value="Date">Date</option>
+				<option value="Language A-Z">Languages A-Z</option>
+			</select>
+
+			<input type="text" name="Search" placeholder="Search" style="text-align: center; width: 20%; padding: 2px;">
+			<button type="submit">Submit</button>
+
+			<a href="userask.html" style="float: right;">Ask A Question</a>
+		</h4>
+
+		<div id="root"></div>
+
+		<h3>Rows 
+			<select>
+				<option value="5">5</option>
+				<option value="10">10</option>
+			</select> 
+			Page 
+			<select>
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+				<option value="8">8</option>
+				<option value="9">9</option>
+				<option value="10">10</option>
+			</select>
+		</h3>  
+
+
+
+
+	</div>
+	<script src="{{ url_for('static', filename = 'js/questions.js') }}"></script>
+
+
+
+</body></html>
