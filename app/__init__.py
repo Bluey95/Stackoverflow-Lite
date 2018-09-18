@@ -1,5 +1,6 @@
 import os
 from config import app_config
+from flask_cors import CORS
 
 # third-party imports
 from flask import Flask, redirect,request, jsonify
@@ -16,9 +17,11 @@ def create_app(config_name):
 
     from .questions import api as api_blueprint
     app.register_blueprint(api_blueprint, url_prefix='/api/v2')
+    CORS(api_blueprint)
 
     from .users import user_api as api_blueprint
     app.register_blueprint(api_blueprint, url_prefix='/api/v2/auth')
+    CORS(api_blueprint)
 
 
     @app.route('/')
