@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Sign Up</title>
+	<title>Registration</title>
 
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/style.css') }}">
 </head>
 <body>
-	<form id="form" method="POST" action="https://stackoverflowlitev3.herokuapp.com/api/v2/auth/registration">
+	<form id="postData">
 		<fieldset>
 			<legend>Sign Up</legend>
-				Username:<br><input class="form-control" type="text" required name="username" id="username"><br></B>
-				Email Address:<br><input class="form-control" type="text" required name="email" id="email"><br>
-				Enter Password:<br><input class="form-control" type="text" required name="password" id="password"><br>
-				Enter Password Again:<br><input class="form-control" type="text" required name="confirmpass" id="confirmpass"><br><br>
+				Username:<br><input type="text" id="Username"><br></B>
+				Email Address:<br><input type="text" id="Email"><br>
+				Enter Password:<br><input type="text" id="Password"><br>
+				Enter Password Again:<br><input type="text" id="ConfirmPassword"><br><br>
 
-				<input type="submit" value="SEND POST"> Already have an account?<a href="signin.html">Log in</a>
-		</fieldset>	
+				<input type="submit" value="SEND POST"> No account?<a href="signup.html"> Sign Up</a>
+		</fieldset>
+		
 	</form>
-      <script src="{{ url_for('static', filename = 'js/registration.js') }}"></script>
+
+	<script src="{{ url_for('static', filename = 'js/registration.js') }}"></script>
 </body>
 </html>
