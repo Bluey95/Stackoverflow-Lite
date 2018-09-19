@@ -5,6 +5,9 @@ let confirmPassword = document.getElementById('ConfirmPassword').value;
 
 fetch('https://stackoverflowlitev3.herokuapp.com/api/v2/auth/registration', {
     method: 'POST',
+    headers:{
+        'Content-Type': 'application/json'
+      },
     body:JSON.stringify({
         username:username, 
         email:email, 
