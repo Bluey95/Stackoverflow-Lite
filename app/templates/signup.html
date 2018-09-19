@@ -6,10 +6,10 @@
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/style.css') }}">
 </head>
 <body>
-	<form id="postData">
+	<form id="postData" name="myForm" onsubmit="return validateForm()">
 		<fieldset>
 			<legend>Sign Up</legend>
-				Username:<br><input type="text" id="Username"><br></B>
+				Username:<br><input type="text" id="Username" name="Username"><br></B>
 				Email Address:<br><input type="text" id="Email"><br>
 				Enter Password:<br><input type="text" id="Password"><br>
 				Enter Password Again:<br><input type="text" id="ConfirmPassword"><br><br>
