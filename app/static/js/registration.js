@@ -1,26 +1,52 @@
-function submitForm(){
-    let username = document.getElementById('Username').value
-    let email = document.getElementById('Email').value
-    let password = document.getElementById('Password').value
-    let confirmpass = document.getElementById('ConfirmPassword').value
-    
-    var http = new XMLHttpRequest();
-    var url = 'https://stackoverflowlitev3.herokuapp.com/api/v2/auth/registration';
-    var params = JSON.stringify({
-        "username" : username, 
-        "email" : email, 
-        "password" : password, 
-        "confirmpass" : confirmpass
-    });
-    http.open('POST', url, true);
-    
-    //Send the proper header information along with the request
-    http.setRequestHeader('Content-type', 'application/json');
-    
-    http.onreadystatechange = function() {//Call a function when the state changes.
-        if(http.readyState == 4 && http.status == 200) {
-            alert(http.responseText);
+document.addEventListener("DOMContentLoaded", function() {
+    var Username = document.getElementById("Username").value;
+    var Email = document.getElementById("Email").value;
+    var Password = document.getElementById("Password").value;
+    var Confirmpass = document.getElementById("ConfirmPassword").value;
+
+    p = {
+        username:Username,
+        email:Email,
+        password:Password,
+        confirmpass:Confirmpass
+    }
+
+    console.log(JSON.stringify(p))
+    $("#test").click(function(){
+        fetch('https://stackoverflowlitev3.herokuapp.com/api/v2/auth/registration', {
+        method: 'POST',
+        mode: 'cors', 
+        redirect: 'follow',
+        headers: new Headers({
+        'Content-Type': 'application/json'
+        }),
+        body:JSON.stringify(p)
+        }).then(function(response) {
+        if (response.status == 201){
+            response.json().then(data => example(data));
+            alert("You have been successfuly Registered. Please Login To Continue");
+            window.location.replace("signin.html")
+        }else if (response.status == 400 || response.status == 422){
+            response.json().then(
+                data => 
+                { var arr = [];
+
+                for (var key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        arr.push( [ key, data[key] ] );
+                    }
+                }alert(data[key]); location.reload();});
         }
-    }
-    http.send(params);
-    }
+        else{
+        //failed
+        response.json().then(data => console.log("Failed: ", data));
+        }
+        }).catch(err => console.log(err));
+        function example(data){
+            //execute some statements
+            console.log(JSON.stringify(data));
+        }
+        return false;
+        });
+}); 
+
