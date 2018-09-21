@@ -10,7 +10,7 @@ from config import app_config
 
 def create_app(config_name):
     app = Flask(__name__, instance_relative_config=True)
-    CORS(app, support_credentials=True)
+    cors = CORS(app, resorces={r'/d/*': {"origins": '*'}})
     app.url_map.strict_slashes = False
     # print(app_config.get('FLASK_CONFIG'))
     # print('*'*123)
