@@ -1,8 +1,8 @@
 function submitForm(){
-    let username = "cheruto"
-    let email = "cheruto@gmail.com"
-    let password = "Cheruto123"
-    let confirmpass = "Cheruto123"
+    let username = document.getElementById('Username').value
+    let email = document.getElementById('Email').value
+    let password = document.getElementById('Password').value
+    let confirmpass = document.getElementById('ConfirmPassword').value
     
     var http = new XMLHttpRequest();
     var url = 'https://stackoverflowlitev3.herokuapp.com/api/v2/auth/registration';
