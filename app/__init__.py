@@ -10,7 +10,7 @@ from config import app_config
 
 def create_app(config_name):
     app = Flask(__name__, instance_relative_config=True)
-    cors = CORS(app, resorces={r'/d/*': {"origins": '*'}})
+    cors = CORS(app, resorces={r'/api/v2/*': {"origins": '*'}})
     app.url_map.strict_slashes = False
     # print(app_config.get('FLASK_CONFIG'))
     # print('*'*123)
@@ -19,11 +19,11 @@ def create_app(config_name):
 
     from .questions import api as api_blueprint
     app.register_blueprint(api_blueprint, url_prefix='/api/v2')
-    cors = CORS(api_blueprint, resources={r"/api/v2*": {"origins": "*"}})
+    cors = CORS(api_blueprint, resources={r"/api/v2/*": {"origins": "*"}})
 
     from .users import user_api as api_blueprint
     app.register_blueprint(api_blueprint, url_prefix='/api/v2/auth')
-    cors = CORS(api_blueprint, resources={r"/api/v2/auth*": {"origins": "*"}})
+    cors = CORS(api_blueprint, resources={r"/api/v2/auth/*": {"origins": "*"}})
 
     def options (self):
         return {'Allow' : 'GET' }, 200, \
