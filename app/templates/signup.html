@@ -3,21 +3,21 @@
 <head>
 	<title>Registration</title>
 
+	
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/style.css') }}">
 </head>
 <body>
 	<form id="postData" name="myForm">
 		<fieldset>
 			<legend>Sign Up</legend>
-				Username:<br><input type="text" id="Username" name="Username"><br></B>
-				Email Address:<br><input type="text" id="Email"><br>
-				Enter Password:<br><input type="text" id="Password"><br>
-				Enter Password Again:<br><input type="text" id="ConfirmPassword"><br><br>
+				Username:<br><input type="text" id="Username" name="Username" placeholder="username"><br></B>
+				Email Address:<br><input type="email" id="Email" placeholder="email"><br>
+				Enter Password:<br><input type="password" id="Password" placeholder="password"><br>
+				Confirm Password:<br><input type="password" id="ConfirmPassword" placeholder="confirm your password"><br><br>
 
-				<input type="submit" id="test" value="SEND POST"> No account?<a href="signup.html"> Sign Up</a>
+				<input type="submit" value="SEND POST" id="test"> No account?<a href="signup.html"> Sign Up</a>
 		</fieldset>
 	</form>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="{{ url_for('static', filename = 'js/registration.js') }}"></script>
 </body>
 </html>

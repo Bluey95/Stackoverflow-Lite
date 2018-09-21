@@ -12,7 +12,8 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     console.log(JSON.stringify(p))
-    $("#test").click(function(){
+    var button = document.getElementById("test");
+    button.onclick = function(){
         fetch('https://stackoverflowlitev3.herokuapp.com/api/v2/auth/registration', {
         method: 'POST',
         mode: 'cors', 
@@ -47,6 +48,6 @@ document.addEventListener("DOMContentLoaded", function() {
             console.log(JSON.stringify(data));
         }
         return false;
-        });
-}); 
+    }
+}) 
 
