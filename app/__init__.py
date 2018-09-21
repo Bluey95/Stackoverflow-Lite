@@ -21,7 +21,7 @@ def create_app(config_name):
     CORS(app.register_blueprint(api_blueprint, url_prefix='/api/v2'))
 
     from .users import user_api as api_blueprint
-    app.register_blueprint(api_blueprint, url_prefix='/api/v2/auth')
+    CORS(app.register_blueprint(api_blueprint, url_prefix='/api/v2/auth'))
 
 
     @app.route("/")

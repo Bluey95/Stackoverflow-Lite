@@ -14,11 +14,10 @@
 				Enter Password:<br><input type="text" id="Password"><br>
 				Enter Password Again:<br><input type="text" id="ConfirmPassword"><br><br>
 
-				<input type="submit" value="SEND POST" onclick="return submitForm()"> No account?<a href="signup.html"> Sign Up</a>
+				<input type="submit" id="test" value="SEND POST"> No account?<a href="signup.html"> Sign Up</a>
 		</fieldset>
-		
 	</form>
-
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="{{ url_for('static', filename = 'js/registration.js') }}"></script>
 </body>
 </html>
