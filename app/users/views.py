@@ -3,6 +3,7 @@ from . import user_api
 from .models import User
 import re
 from app.jwtfile import Jwt_details
+from flask_cors import CORS, cross_origin
 
 userObject = User() 
 jwt_obj = Jwt_details()
@@ -59,6 +60,7 @@ def validate_data(data):
         return "please provide all the fields, missing " + str(error)
 
 @user_api.route('/registration', methods=["POST"])
+@cross_origin()
 def reg():
     """ Method to create user account."""
     if request.method == "POST":
@@ -79,6 +81,7 @@ def reg():
 
 
 @user_api.route('/login', methods=["POST"])
+@cross_origin()
 def login():
     """ Method to login user """
     try:
@@ -99,7 +102,8 @@ def login():
     except Exception:
         return jsonify({"message": "bad json object"}), 400
 
-@user_api.route('/users', methods=["GET"])    
+@user_api.route('/users', methods=["GET"])  
+@cross_origin()  
 def users():
     try:
         if request.method == "GET":
@@ -109,6 +113,7 @@ def users():
         return jsonify({"message": "bad json object"}), 400
 
 @user_api.route('/users/<int:id>', methods=["GET"])
+@cross_origin()
 def user_id(id):
     """ Method to retrieve a specific user."""
     try:
