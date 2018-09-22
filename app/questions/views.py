@@ -4,7 +4,6 @@ from .models import Question, Answer
 import re
 from app.users.models import User
 from app.jwtfile import Jwt_details
-from flask_cors import CORS, cross_origin
 questionObject = Question()
 answerObject = Answer() 
 jwt_obj = Jwt_details()
@@ -67,7 +66,6 @@ def validate_answers_data(data):
         return "please provide all the fields, missing " + str(error)
 
 @api.route('/questions', methods=["GET", "POST"])
-@cross_origin()
 def question():
     """ Method to create and retrieve questions."""
     try:
@@ -82,12 +80,11 @@ def question():
                 return response
             return jsonify({"message":res}), 422
         data = questionObject.get_all_questions()
-        return data
+        return jsonify(data)
     except Exception:
         return jsonify({"message": "Bad JSON object"}), 400
 
 @api.route('/questions/<int:id>', methods=["GET", "PUT"])
-@cross_origin()
 def question_id(id):
     """ Method to retrieve and update a specific question."""
     if request.method == 'PUT':
@@ -124,7 +121,6 @@ def question_id(id):
         return item, 200
 
 @api.route('/questions/<int:qid>/answer', methods=["POST"])
-@cross_origin()
 def answer(qid):
 
     """ Method to create and retrieve questions."""
@@ -144,7 +140,6 @@ def answer(qid):
 
 
 @api.route('/questions/<int:id>/answer/<int:ansid>', methods=["GET","PUT"])
-@cross_origin()
 def mark(id, ansid):
 
     """ Method to create a mark."""
@@ -172,7 +167,6 @@ def mark(id, ansid):
     return response
 
 @api.route('/questions/<int:id>/answer/<int:ansid>/upvote', methods=["PUT"])
-@cross_origin()
 def upvote_answer(id, ansid):
 
     """ Method to upvote."""

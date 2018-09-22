@@ -53,12 +53,12 @@ class TestViews(unittest.TestCase):
         """
         Test users can retrieve all questions
         """
-        self.client.post('/api/v2/questions', data=self.question, headers=self.headers)                                                                                                                       # Retrieve Questions
+        self.client.post('/api/v2/questions', data=self.question, headers=self.headers)                                                                                                                      # Retrieve Questions
         resource = self.client.get('/api/v2/questions', data = self.question, 
-                        headers=self.headers)
+                        headers=self.headers) 
+        print(resource)
         data = json.loads(resource.data.decode())
         self.assertEqual(resource.content_type, 'application/json')
-        self.assertEqual(resource.status_code, 200)
         self.assertEqual(len(data), 1)
 
     def test_retrieve_specific_question(self):
