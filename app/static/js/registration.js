@@ -1,19 +1,20 @@
 document.addEventListener("DOMContentLoaded", function() {
-    var Username = document.getElementById("Username").value;
-    var Email = document.getElementById("Email").value;
-    var Password = document.getElementById("Password").value;
-    var Confirmpass = document.getElementById("ConfirmPassword").value;
-
-    p = {
-        username:Username,
-        email:Email,
-        password:Password,
-        confirmpass:Confirmpass
-    }
-
-    console.log(JSON.stringify(p))
     var button = document.getElementById("test");
     button.onclick = function(){
+        var Username = document.getElementById("Username").value;
+        var Email = document.getElementById("Email").value;
+        var Password = document.getElementById("Password").value;
+        var Confirmpass = document.getElementById("ConfirmPassword").value;
+    
+        p = {
+            username:Username,
+            email:Email,
+            password:Password,
+            confirmpass:Confirmpass
+        }
+
+        console.log(JSON.stringify(p))
+
         fetch('https://stackoverflowlitev3.herokuapp.com/api/v2/auth/registration', {
         method: 'POST',
         mode: 'cors', 
@@ -36,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     if (data.hasOwnProperty(key)) {
                         arr.push( [ key, data[key] ] );
                     }
-                }alert(data[key]); location.reload();});
+                }alert(data[key]); window.location.reload(true);});
         }
         else{
         //failed
