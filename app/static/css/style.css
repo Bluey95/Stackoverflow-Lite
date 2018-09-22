@@ -1,8 +1,9 @@
 body{
-	background-color: #cccedf;
 	margin: 0;
 	padding: 0;
 	color: #ffffff;
+	/* background-image: url("{{ url_for('static', filename = 'img/bg.jpeg') }}"); */
+	background-color: #cccedf;
 }
 
 a{
@@ -13,10 +14,21 @@ a{
 	margin: 0 auto;
 	width: 500px;
 	margin-top: 30px;
+	background-color: #000638;
 
 }
 
-input[type=text]{
+#postData{
+	margin: 0 auto;
+	width: 500px;
+	margin-top: 30px;
+	background-color: #000638;
+	padding: 20px;
+	border-radius: 10px;
+
+}
+
+input{
 	width: 100%;
 	padding: 12px 20px;
 	margin: 6px 0;
@@ -36,8 +48,8 @@ legend{
 	border-radius: 4px;
 	box-sizing: border-box;
 	padding: 10px;
-	background-color: #000638;
-	color: #ffffff;
+	background-color: #ffffff;
+	color: #000638;
 }
 
 input[type=submit]{
@@ -121,6 +133,10 @@ li a{
 li a:hover{
 	background-color: #ffffff;
 	color: #000638;
+}
+
+#test{
+	background-color: #cccedf;
 }
 
 .active{
