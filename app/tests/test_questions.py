@@ -59,6 +59,7 @@ class TestViews(unittest.TestCase):
         print(resource)
         data = json.loads(resource.data.decode())
         self.assertEqual(resource.content_type, 'application/json')
+        self.assertEqual(resource.status_code, 200)
         self.assertEqual(len(data), 1)
 
     def test_retrieve_specific_question(self):

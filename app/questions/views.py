@@ -80,7 +80,7 @@ def question():
                 return response
             return jsonify({"message":res}), 422
         data = questionObject.get_all_questions()
-        return jsonify(data)
+        return data
     except Exception:
         return jsonify({"message": "Bad JSON object"}), 400
 
