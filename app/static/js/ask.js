@@ -1,37 +1,28 @@
 document.addEventListener("DOMContentLoaded", function() {
     var button = document.getElementById("submit");
     button.onclick = function(){
-        var Username = document.getElementById("Username").value;
-        var Password = document.getElementById("Password").value;
-    
-        p = {
-            username:Username,
-            password:Password
-        }
+        var questionBody = document.getElementById("questionBody").value;
+        var token = "Bearer" + localStorage.getItem('Access_token')
 
+        p = {
+            body:questionBody
+        }
         console.log(JSON.stringify(p))
 
-        fetch('https://stackoverflowlitev3.herokuapp.com/api/v2/auth/login', {
+        fetch('https://stackoverflowlitev3.herokuapp.com/api/v2/questions', {
         method: 'POST',
         mode: 'cors', 
+        crossdomain: true,
         redirect: 'follow',
         headers: new Headers({
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': token
         }),
         body:JSON.stringify(p)
         }).then(function(response) {
         if (response.status == 201){
-            response.json().then(data => { 
-                var arr = [];
-                for (var key in data) {
-                    if (data.hasOwnProperty(key)) {
-                        arr.push( [ key, data[key] ] );
-                        let token = (arr[0][1]).substring(2, (arr[0][1]).length - 1);
-                        console.log(token)
-                        localStorage.setItem('Access_token', token);
-                    }
-                }        
-          }, window.location.replace("index.html"));
+            response.json().then(data => example(data));
+            window.location.replace("index.html")
         }else if (response.status == 400 || response.status == 422){
             response.json().then(
                 data => 
