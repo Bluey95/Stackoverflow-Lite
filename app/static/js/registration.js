@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-    var button = document.getElementById("register");
+    var button = document.getElementById("submit");
     button.onclick = function(){
         var Username = document.getElementById("Username").value;
         var Email = document.getElementById("Email").value;
