@@ -1,24 +1,28 @@
 document.addEventListener("DOMContentLoaded", function() {
     var button = document.getElementById("submit");
     button.onclick = function(){
+        var questionTitle = document.getElementById("questionTitle").value;
         var questionBody = document.getElementById("questionBody").value;
-        var token = "Bearer " + localStorage.getItem('Access_token')
+        var getTOken = window.sessionStorage.getItem('token');
+        var token = "Bearer " + getTOken;
+        alert(token)
 
         p = {
+            title:questionTitle,
             body:questionBody
         }
-        console.log(JSON.stringify(p))
+        console.log(p)
 
         fetch('https://stackoverflowlitev3.herokuapp.com/api/v2/questions', {
         method: 'POST',
         mode: 'cors', 
         crossdomain: true,
         redirect: 'follow',
-        headers: new Headers({
-        'Content-Type': 'application/json',
-        'Authorization': token
-        }),
-        body:JSON.stringify(p)
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        },
+        body: p
         }).then(function(response) {
         if (response.status == 201){
             response.json().then(data => example(data));

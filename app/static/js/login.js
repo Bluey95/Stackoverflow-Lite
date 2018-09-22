@@ -23,7 +23,8 @@ document.addEventListener("DOMContentLoaded", function() {
         if (response.status == 201){
             response.json().then(data => {
                 let token = (data.Access_token).substring(2, (data.Access_token).length -1); 
-                localStorage.setItem('token', token);},
+                alert(token);
+                window.sessionStorage.setItem('token', token);},
             window.location.replace("index.html"));
         }else if (response.status == 400 || response.status == 422){
             response.json().then(
