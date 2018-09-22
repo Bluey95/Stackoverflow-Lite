@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var Email = document.getElementById("Email").value;
     var Password = document.getElementById("Password").value;
     var Confirmpass = document.getElementById("ConfirmPassword").value;
+    alert(Confirmpass)
 
     p = {
         username:Username,
