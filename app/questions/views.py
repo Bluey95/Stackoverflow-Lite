@@ -68,21 +68,18 @@ def validate_answers_data(data):
 @api.route('/questions', methods=["GET", "POST"])
 def question():
     """ Method to create and retrieve questions."""
-    try:
-        if request.method == "POST":
-            data = request.get_json()
-            res = validate_data(data)
-            if res == "valid":
-                title = data['title']
-                body = data['body']
-                question = Question(title, body)
-                response = question.create()
-                return response
-            return jsonify({"message":res}), 422
-        data = questionObject.get_all_questions()
-        return data
-    except Exception:
-        return jsonify({"message": "Bad JSON object"}), 400
+    if request.method == "POST":
+        data = request.get_json()
+        res = validate_data(data)
+        if res == "valid":
+            title = data['title']
+            body = data['body']
+            question = Question(title, body)
+            response = question.create()
+            return response
+        return jsonify({"message":res}), 422
+    data = questionObject.get_all_questions()
+    return data
 
 @api.route('/questions/<int:id>', methods=["GET", "PUT"])
 def question_id(id):
