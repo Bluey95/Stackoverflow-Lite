@@ -6,14 +6,15 @@
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/style.css') }}">
 </head>
 <body>
-	<form id="form" style="margin-top: 150px;">
+	<form id="form" name="myForm">
 		<fieldset>
-			<legend>Sign In</legend>
-				Email Address:<br><input type="text" name="Email"><br>
-				Enter Password:<br><input type="text" name="Password"><br><br>
-				<a class="btn" href="index.html">Sign In</a> No account?<a href="signup.html"> Sign Up</a>
+			<legend>Log in</legend>
+				Username:<br><input type="text" id="Username" name="Username" placeholder="username"><br></B>
+				Enter Password:<br><input type="password" id="Password" placeholder="password"><br><br>
+
+				<input type="submit" value="Login" id="test"> No account?<a href="signup.html"> Sign Up</a>
 		</fieldset>
-		
 	</form>
+	<script src="{{ url_for('static', filename = 'js/login.js') }}"></script>
 </body>
 </html>

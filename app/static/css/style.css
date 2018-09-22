@@ -8,7 +8,7 @@ body{
 	background-repeat: no-repeat;
 	background-size: cover;
 	position: relative;
-	height: 100%;
+	background-attachment: fixed;
 }
 
 a{
@@ -18,8 +18,11 @@ a{
 #form{
 	margin: 0 auto;
 	width: 500px;
-	margin-top: 30px;
+	margin-top: 150px;
 	background-color: #000638;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 5px 8px 5px #1a1919;
 
 }
 
