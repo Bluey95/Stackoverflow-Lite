@@ -144,8 +144,12 @@ li a:hover{
 	color: #000638;
 }
 
-#test{
+#submit{
 	background-color: #cccedf;
+}
+
+#submit:hover{
+	background-color: #0d9fe2;
 }
 
 .active{
