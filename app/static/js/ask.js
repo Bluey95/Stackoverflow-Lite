@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var button = document.getElementById("submit");
     button.onclick = function(){
         var questionBody = document.getElementById("questionBody").value;
-        var token = "Bearer" + localStorage.getItem('Access_token')
+        var token = "Bearer " + localStorage.getItem('Access_token')
 
         p = {
             body:questionBody

@@ -21,17 +21,10 @@ document.addEventListener("DOMContentLoaded", function() {
         body:JSON.stringify(p)
         }).then(function(response) {
         if (response.status == 201){
-            response.json().then(data => { 
-                var arr = [];
-                for (var key in data) {
-                    if (data.hasOwnProperty(key)) {
-                        arr.push( [ key, data[key] ] );
-                        let token = (arr[0][1]).substring(2, (arr[0][1]).length - 1);
-                        console.log(token)
-                        localStorage.setItem('Access_token', token);
-                    }
-                }        
-          }, window.location.replace("index.html"));
+            response.json().then(data => {
+                let token = (data.Access_token).substring(2, (data.Access_token).length -1); 
+                localStorage.setItem('token', token);},
+            window.location.replace("index.html"));
         }else if (response.status == 400 || response.status == 422){
             response.json().then(
                 data => 
