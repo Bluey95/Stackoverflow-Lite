@@ -11,23 +11,25 @@ jwt_obj = Jwt_details()
 @api.before_app_request
 def before_request():
     """get the user bafore every request"""
-    try:
-        if request.method != 'GET':
-            auth_header = request.headers.get('authorization')
-            g.user = None
-            access_token = auth_header.split(" ")[1]
-            res = jwt_obj.decode_auth_token(access_token)
-            if isinstance(res, int) and not jwt_obj.is_blacklisted(access_token):
-                # check if no error in string format was returned
-                # find the user with the id on the token
-                user = User()
-                response = user.user_by_id(res)
-                g.userid = response['id']
-                g.username = response['username']
-                return
-            return jsonify({"message": "Please register or login to continue"}), 401
-    except Exception:
-        return jsonify({"message": "Authorization header or acess token is missing."}), 400
+    if request.endpoint and 'auth' not in request.url:
+
+        try:
+            if request.method != 'GET':
+                auth_header = request.headers.get('authorization')
+                g.user = None
+                access_token = auth_header.split(" ")[1]
+                res = jwt_obj.decode_auth_token(access_token)
+                if isinstance(res, int) and not jwt_obj.is_blacklisted(access_token):
+                    # check if no error in string format was returned
+                    # find the user with the id on the token
+                    user = User()
+                    response = user.user_by_id(res)
+                    g.userid = response['id']
+                    g.username = response['username']
+                    return
+                return jsonify({"message": "Please register or login to continue"}), 401
+        except Exception:
+            return jsonify({"message": "Authorization header or acess token is missing."}), 400
 
 def validate_data(data):
     """validate request details"""
@@ -66,18 +68,21 @@ def validate_answers_data(data):
 @api.route('/questions', methods=["GET", "POST"])
 def question():
     """ Method to create and retrieve questions."""
-    if request.method == "POST":
-        data = request.get_json()
-        res = validate_data(data)
-        if res == "valid":
-            title = data['title']
-            body = data['body']
-            question = Question(title, body)
-            response = question.create()
-            return response
-        return jsonify({"message":res}), 422
-    data = questionObject.get_all_questions()
-    return data
+    try:
+        if request.method == "POST":
+            data = request.get_json()
+            res = validate_data(data)
+            if res == "valid":
+                title = data['title']
+                body = data['body']
+                question = Question(title, body)
+                response = question.create()
+                return response
+            return jsonify({"message":res}), 422
+        data = questionObject.get_all_questions()
+        return data
+    except Exception:
+        return jsonify({"message": "Bad JSON object"}), 400
 
 @api.route('/questions/<int:id>', methods=["GET", "PUT"])
 def question_id(id):
@@ -100,7 +105,7 @@ def question_id(id):
                             body = data['body']
                             req = Question(title, body)
                             res = req.update(id)
-                            return jsonify({"message": "Update succesfful"}), 201, {'Access-Control-Allow-Origin': '*'}
+                            return jsonify({"message": "Update succesfful"}), 201
                         except Exception as error:
                             # an error occured when trying to update request
                             response = {'message': str(error)}
