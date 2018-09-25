@@ -11,7 +11,7 @@ jwt_obj = Jwt_details()
 @api.before_app_request
 def before_request():
     """get the user bafore every request"""
-    if request.endpoint and 'auth' not in request.url:
+    try:
         if request.method != 'GET':
             auth_header = request.headers.get('authorization')
             g.user = None
@@ -26,6 +26,8 @@ def before_request():
                 g.username = response['username']
                 return
             return jsonify({"message": "Please register or login to continue"}), 401
+    except Exception:
+        return jsonify({"message": "Authorization header or acess token is missing."}), 400
 
 def validate_data(data):
     """validate request details"""
