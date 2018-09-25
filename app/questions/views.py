@@ -12,7 +12,7 @@ jwt_obj = Jwt_details()
 def before_request():
     """get the user bafore every request"""
     try:
-        if request.method != 'OPTIONS':
+        if request.method != 'GET':
             auth_header = request.headers.get('authorization')
             g.user = None
             access_token = auth_header.split(" ")[1]

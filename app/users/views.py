@@ -14,7 +14,7 @@ def before_request():
 
         try:
 
-            if request.method != 'OPTIONS':
+            if request.method != 'GET':
                 auth_header = request.headers.get('authorization')
                 g.user = None
                 access_token = auth_header.split(" ")[1]
