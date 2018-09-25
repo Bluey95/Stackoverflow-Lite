@@ -7,31 +7,6 @@ from app.jwtfile import Jwt_details
 userObject = User() 
 jwt_obj = Jwt_details()
 
-@user_api.before_app_request
-def before_request():
-    """get the user bafore every request"""
-    if request.endpoint and 'auth' not in request.url:
-
-        try:
-
-            if request.method != 'GET':
-                auth_header = request.headers.get('authorization')
-                g.user = None
-                access_token = auth_header.split(" ")[1]
-                res = jwt_obj.decode_auth_token(access_token)
-                if isinstance(res, int) and not jwt_obj.is_blacklisted(access_token):
-                    # check if no error in string format was returned
-                    # find the user with the id on the token
-                    user = User()
-                    res = user.user_by_id(res)
-                    g.userid = res['id']
-                    g.username = res['username']
-                    return
-                return jsonify({"message": "Please register or login to continue"}), 401
-        except Exception:
-            return jsonify({"message": "Authorization header or access token is missng."}), 400
-
-
 def validate_data(data):
     """validate user details"""
     try:
