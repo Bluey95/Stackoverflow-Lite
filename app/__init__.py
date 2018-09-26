@@ -2,15 +2,16 @@ import os
 from config import app_config
 # third-party imports
 from flask import Flask, redirect,request, jsonify
+from flask_cors import CORS
 
 # local imports
 from config import app_config
 
 def create_app(config_name):
     app = Flask(__name__, instance_relative_config=True)
+    CORS(app)
+
     app.url_map.strict_slashes = False
-    # print(app_config.get('FLASK_CONFIG'))
-    # print('*'*123)
     app.config.from_object(app_config[os.getenv('FLASK_CONFIG')])
 
 

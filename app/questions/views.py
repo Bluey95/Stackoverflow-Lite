@@ -4,6 +4,7 @@ from .models import Question, Answer
 import re
 from app.users.models import User
 from app.jwtfile import Jwt_details
+
 questionObject = Question()
 answerObject = Answer() 
 jwt_obj = Jwt_details()
