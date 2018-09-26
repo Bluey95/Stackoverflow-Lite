@@ -15,7 +15,7 @@ def before_request():
     if request.endpoint and 'auth' not in request.url:
 
         try:
-            if request.method != 'GET':
+            if request.method != 'OPTIONS':
                 auth_header = request.headers.get('authorization')
                 g.user = None
                 access_token = auth_header.split(" ")[1]
@@ -29,7 +29,6 @@ def before_request():
                     g.username = response['username']
                     return
                 return jsonify({"message": "Please register or login to continue"}), 401
-            return
         except Exception:
             return jsonify({"message": "Authorization header or acess token is missing."}), 400
 
