@@ -27,6 +27,7 @@ def before_request():
                     g.username = res['username']
                     return
                 return jsonify({"message": "Please register or login to continue"}), 401
+            return
         except Exception:
             return jsonify({"message": "Authorization header or access token is missng."}), 400
 
