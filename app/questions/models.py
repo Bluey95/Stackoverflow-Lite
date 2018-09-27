@@ -156,6 +156,7 @@ class Answer(object):
         """ Serialize tuple into dictionary """
         cur.execute("SELECT * FROM answers WHERE id = %s;", (id,))
         answer = cur.fetchone()
+        print(answer)
         if answer:
             return jsonify({"Answer":self.answers_serialiser(answer)})
         return False
@@ -190,12 +191,6 @@ class Answer(object):
             self.save()
             return jsonify({"message": "Update succesfful", "response": self.answers_serialiser(item)}), 201
         return jsonify({"message": "Sorry the answer with this id doesnt exist."}), 404
-
-    def delete(self, question_id):
-        cur.execute(
-            "DELETE FROM questions WHERE id=%s", (question_id, ))
-        self.save()
-        return "Deleted Successfully"
 
     def delete_answer(self, answer_id):
         cur.execute(

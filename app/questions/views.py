@@ -229,16 +229,19 @@ def admin_delete_answer(id, ansid):
         return jsonify(response="Question does not exist"), 404
     else:
         answer_exist = answerObject.fetch_answer_by_id(ansid)
-        if answerObject.is_owner(ansid, g.userid) is False:
-            return jsonify({"message": "Sorry you have no permission to delete this answer"}), 401
+        if not answer_exist:
+            return jsonify(response="Answer does not exist"), 404
         else:
-            try:
-                resp = answerObject.delete(ansid)
-                return jsonify(response=resp), 200
-            except Exception as error:
-                # an error occured when trying to update request
-                response = {'message': str(error)}
-                return jsonify(response), 401
+            if answerObject.is_owner(ansid, g.userid) is False:
+                return jsonify({"message": "Sorry you have no permission to delete this answer"}), 401
+            else:
+                try:
+                    resp = answerObject.delete_answer(ansid)
+                    return jsonify(response=resp), 200
+                except Exception as error:
+                    # an error occured when trying to update request
+                    response = {'message': str(error)}
+                    return jsonify(response), 401
 
 
 @api.route('/questions/myquestions', methods=["GET"])
