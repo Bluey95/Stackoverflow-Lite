@@ -244,6 +244,7 @@ def admin_delete_answer(id, ansid):
 @api.route('/questions/myquestions', methods=["GET"])
 def myquestions():
     """ Method to retrieve a specific user's questions."""
+    print(g.userid)
     item = questionObject.fetch_question_by_userid(g.userid)
     return item, 200
 

@@ -73,10 +73,10 @@ class Question(object):
             return jsonify({"Question":self.question_serialiser(question), "Answers":answers})
         return False
 
-    def fetch_question_by_userid(self, userid):
+    def fetch_question_by_userid(self, id):
         """ Serialize tuple into dictionary """
-        print("we are here now")
         cur.execute("SELECT * FROM questions WHERE user_id = %s;", (id,))
+        print("currently here")
         questions_tuple = cur.fetchall()
         questions = []
         
