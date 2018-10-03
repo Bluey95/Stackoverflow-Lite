@@ -244,9 +244,10 @@ class Answer(object):
         cur.execute(
             "SELECT MAX(question_id), COUNT (question_id) FROM answers GROUP BY question_id")
         res = cur.fetchall()
+        print(res)
         most_question_list = []
         for item in res:
-            most_question_list.append({"question_id":item[0], "no. of answers":item[1]})
+            most_question_list.append({"question_id":item[0], "answers":item[1]})
         return jsonify({"Questions":most_question_list})
 
     def answers_serialiser(self, answer):
