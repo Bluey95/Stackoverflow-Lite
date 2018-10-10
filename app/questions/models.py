@@ -224,7 +224,7 @@ class Answer(object):
             cur.execute("UPDATE answers SET votes = %s WHERE id = %s;", (upvote, answer_id))
             item = self.fetch_answer(answer_id)
             self.save()
-            return jsonify({"message": "Upvote successful"}), 201
+            return res, 201
         return jsonify({"message": "Sorry the answer with this id doesnt exist."}), 404
 
     def downvote(self, answer_id):

@@ -11,7 +11,6 @@ jwt_obj = Jwt_details()
 def before_request():
     """get the user bafore every request"""
     if request.endpoint and 'auth' not in request.url:
-
         try:
             if request.method != 'OPTIONS':
                 auth_header = request.headers.get('authorization')
