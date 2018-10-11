@@ -17,13 +17,16 @@ class Jwt_details(object):
                 'iat': datetime.utcnow(),
                 'sub': userid
             }
+            
             # create the byte string token using the payload and the SECRET key
             jwt_string = jwt.encode(
                 payload,
                 os.getenv('SECRET'),
                 algorithm='HS256'
             )
+            print("getting here now")
             return jwt_string
+
 
         except Exception as error:
             # return an error in string format if an exception occurs

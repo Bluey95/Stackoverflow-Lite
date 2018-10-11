@@ -128,10 +128,10 @@ class Answer(object):
         is_accepted = False
         cur.execute(
                 """
-                INSERT INTO answers (body, answered_by, user_id, question_id, is_accepted, votes)
-                VALUES (%s, %s, %s, %s, %s, %s) RETURNING id;
+                INSERT INTO answers (body, answered_by, user_id, question_id, is_accepted)
+                VALUES (%s, %s, %s, %s, %s) RETURNING id;
                 """,
-            (self.body, answered_by, user_id, self.question_id, is_accepted, self.votes))
+            (self.body, answered_by, user_id, self.question_id, is_accepted))
         """fetch the new Answer, pick the id, and assign to questionid"""
         questionid = cur.fetchone()[0]
         """save Answer"""
@@ -141,7 +141,7 @@ class Answer(object):
 
     def fetch_answers_by_question_id(self, id):
         """ Serialize tuple into dictionary """
-        cur.execute("SELECT * FROM answers WHERE question_id = %s;", (id,))
+        cur.execute("SELECT *, (Select COUNT(*) from votes where votes.answer_id=answers.id AND votes.vote=True) as upvotes, (Select COUNT(*) from votes where votes.answer_id=answers.id AND votes.vote=False) as downvotes FROM answers WHERE question_id = %s;", (id,))
         answers_tuple = cur.fetchall()
         answers = []
 
@@ -154,9 +154,8 @@ class Answer(object):
 
     def fetch_answer_by_id(self, id):
         """ Serialize tuple into dictionary """
-        cur.execute("SELECT * FROM answers WHERE id = %s;", (id,))
+        cur.execute("SELECT *,  (Select COUNT(*) from votes where votes.answer_id=%s AND votes.vote=True) as upvotes, (Select COUNT(*) from votes where votes.answer_id=%s AND votes.vote=False) as downvotes FROM answers WHERE id = %s;", (id, id, id))
         answer = cur.fetchone()
-        print(answer)
         if answer:
             return jsonify({"Answer":self.answers_serialiser(answer)})
         return False
@@ -215,29 +214,43 @@ class Answer(object):
             return jsonify({"message": "Update succesfful", 
                 "response": self.answers_serialiser(item)}), 201
         return jsonify({"message": "Sorry the answer with this id doesnt exist."}), 404
+    
+    def is_voted(self, answer_id):
+        cur.execute(""" SELECT * FROM votes WHERE answer_id=%s and voted_by=%s""",(answer_id, g.username))
+        res = cur.fetchall()
+        if len(res) >= 1:
+            return True
 
     def upvote(self, answer_id):
+        if self.is_voted(answer_id):
+            return jsonify({"message": "you already voted"})
         res = self.fetch_answer(answer_id)
         if res:
-            upvote = res[6] + 1
-            question_id = res[3]
-            cur.execute("UPDATE answers SET votes = %s WHERE id = %s;", (upvote, answer_id))
+            cur.execute(
+                """
+                INSERT INTO votes (voted_by, answer_id, vote)
+                VALUES (%s, %s, %s) RETURNING id;
+                """,
+            (g.username, answer_id, True))
             item = self.fetch_answer(answer_id)
             self.save()
-            return jsonify({"answered_by": res[2], "votes": res[6]}), 201
+            return jsonify({"message": "upvote successful"}), 201
         return jsonify({"message": "Sorry the answer with this id doesnt exist."}), 404
 
     def downvote(self, answer_id):
+        if self.is_voted(answer_id):
+            return jsonify({"message": "you already voted"})
         res = self.fetch_answer(answer_id)
         if res:
-            if res[6] > 0:
-                downvote = res[6] - 1
-                question_id = res[3]
-                cur.execute("UPDATE answers SET votes = %s WHERE id = %s;", (downvote, answer_id))
-                item = self.fetch_answer(answer_id)
-                self.save()
-                return jsonify({"message": "downvote successful"}), 201
-            return jsonify({"message": "The votes are at minimum"}), 200
+            cur.execute(
+            """
+            INSERT INTO votes (voted_by, answer_id, vote)
+            VALUES (%s, %s, %s) RETURNING id;
+            """,
+            (g.username, answer_id, False))
+            item = self.fetch_answer(answer_id)
+            self.save()
+            return jsonify({"message": "downvote successful"}), 201
         return jsonify({"message": "Sorry the answer with this id doesnt exist."}), 404
     
     def question_with_most_answers(self):
@@ -265,6 +278,7 @@ class Answer(object):
             answered_by=answer[2],
             user_id=answer[4],
             is_accepted=answer[5],
-            votes=answer[6]
+            upvotes=answer[6],
+            downvotes=answer[7]
         )
         return answer_details

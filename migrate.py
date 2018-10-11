@@ -26,9 +26,16 @@ def create_answers_table():
     # Create answers table
     cur.execute("DROP TABLE IF EXISTS answers")
     cur.execute("CREATE TABLE answers(id serial PRIMARY KEY, body varchar, \
-    answered_by varchar, question_id integer, user_id integer, is_accepted varchar, votes integer);")
+    answered_by varchar, question_id integer, user_id integer, is_accepted varchar);")
     
     print("Table Answers Successfully Created")
+    conn.commit()
+
+def create_votes_table():
+    # Create upvotes table
+    cur.execute("DROP TABLE IF EXISTS votes")
+    cur.execute("CREATE TABLE votes(id serial PRIMARY KEY, voted_by varchar, answer_id integer, vote BOOL DEFAULT false);")
+    print("Table votes Successfully Created")
     conn.commit()
 
 
@@ -46,3 +53,4 @@ create_users_table()
 create_questions_table()
 create_answers_table()
 create_blacklist_tokens()
+create_votes_table()
