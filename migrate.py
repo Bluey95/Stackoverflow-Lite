@@ -54,3 +54,10 @@ create_questions_table()
 create_answers_table()
 create_blacklist_tokens()
 create_votes_table()
+
+def main(): 
+    create_users_table()
+    create_questions_table()
+    create_answers_table()
+    create_blacklist_tokens()
+    create_votes_table()
