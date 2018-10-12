@@ -265,6 +265,5 @@ class Answer(object):
             answered_by=answer[2],
             user_id=answer[4],
             is_accepted=answer[5],
-            votes=answer[6]
         )
         return answer_details
