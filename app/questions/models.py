@@ -216,13 +216,13 @@ class Answer(object):
         return jsonify({"message": "Sorry the answer with this id doesnt exist."}), 404
     
     def is_upvoted(self, answer_id):
-        cur.execute(""" SELECT * FROM votes WHERE answer_id=%s vote=True and voted_by=%s""",(answer_id, g.username))
+        cur.execute(""" SELECT * FROM votes WHERE answer_id=%s and vote=True and voted_by=%s""",(answer_id, g.username))
         res = cur.fetchall()
         if len(res) >= 1:
             return True
 
     def is_downvoted(self, answer_id):
-        cur.execute(""" SELECT * FROM votes WHERE answer_id=%s vote=False and voted_by=%s""",(answer_id, g.username))
+        cur.execute(""" SELECT * FROM votes WHERE answer_id=%s and vote=False and voted_by=%s""",(answer_id, g.username))
         res = cur.fetchall()
         if len(res) >= 1:
             return True
