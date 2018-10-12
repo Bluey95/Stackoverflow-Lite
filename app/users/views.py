@@ -93,10 +93,12 @@ def login():
             else:
                 response = {'message': 'invalid username or password, Please try again'}
                 return jsonify(response), 401
-        except Exception:
+        except Exception as e:
+            print(e)
             response = {'message': str(error)}
             return jsonify(response), 401
-    except Exception:
+    except Exception as e:
+        print(e)
         return jsonify({"message": "bad json object"}), 400
 
 @user_api.route('/users', methods=["GET"])    
