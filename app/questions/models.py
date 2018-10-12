@@ -215,14 +215,20 @@ class Answer(object):
                 "response": self.answers_serialiser(item)}), 201
         return jsonify({"message": "Sorry the answer with this id doesnt exist."}), 404
     
-    def is_voted(self, answer_id):
-        cur.execute(""" SELECT * FROM votes WHERE answer_id=%s and voted_by=%s""",(answer_id, g.username))
+    def is_upvoted(self, answer_id):
+        cur.execute(""" SELECT * FROM votes WHERE answer_id=%s, vote=True and voted_by=%s""",(answer_id, g.username))
+        res = cur.fetchall()
+        if len(res) >= 1:
+            return True
+
+    def is_downvoted(self, answer_id):
+        cur.execute(""" SELECT * FROM votes WHERE answer_id=%s, vote=False and voted_by=%s""",(answer_id, g.username))
         res = cur.fetchall()
         if len(res) >= 1:
             return True
 
     def upvote(self, answer_id):
-        if self.is_voted(answer_id):
+        if self.is_upvoted(answer_id):
             return jsonify({"message": "you already voted"})
         res = self.fetch_answer(answer_id)
         if res:
