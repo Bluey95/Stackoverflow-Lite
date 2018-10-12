@@ -11,23 +11,23 @@ jwt_obj = Jwt_details()
 def before_request():
     """get the user bafore every request"""
     if request.endpoint and 'auth' not in request.url:
-        try:
-            if request.method != 'OPTIONS':
-                auth_header = request.headers.get('authorization')
-                g.user = None
-                access_token = auth_header.split(" ")[1]
-                res = jwt_obj.decode_auth_token(access_token)
-                if isinstance(res, int) and not jwt_obj.is_blacklisted(access_token):
-                    # check if no error in string format was returned
-                    # find the user with the id on the token
-                    user = User()
-                    res = user.user_by_id(res)
-                    g.userid = res['id']
+        if request.method != 'OPTIONS':
+            auth_header = request.headers.get('authorization')
+            g.user = None
+            access_token = auth_header.split(" ")[1]
+            res = jwt_obj.decode_auth_token(access_token)
+            if isinstance(res, int) and not jwt_obj.is_blacklisted(access_token):
+                # check if no error in string format was returned
+                # find the user with the id on the token
+                user = User()
+                res = user.user_by_id(res)
+                try:
+                    g.userid = res.get('id')
                     g.username = res['username']
-                    return
-                return jsonify({"message": "Please register or login to continue"}), 401
-        except Exception:
-            return jsonify({"message": "Authorization header or access token is missng."}), 400
+                except Exception as e:
+                    print(e)
+                return
+            return jsonify({"message": "Please register or login to continue"}), 401
 
 
 def validate_data(data):
