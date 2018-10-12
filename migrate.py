@@ -31,13 +31,6 @@ def create_answers_table():
     print("Table Answers Successfully Created")
     conn.commit()
 
-def create_votes_table():
-    # Create upvotes table
-    cur.execute("DROP TABLE IF EXISTS votes")
-    cur.execute("CREATE TABLE votes(id serial PRIMARY KEY, voted_by varchar, answer_id integer, vote BOOL DEFAULT false);")
-    print("Table votes Successfully Created")
-    conn.commit()
-
 
 def create_blacklist_tokens():
     """ Function To create blacklist_tokens table"""    
@@ -53,4 +46,3 @@ create_users_table()
 create_questions_table()
 create_answers_table()
 create_blacklist_tokens()
-create_votes_table()
