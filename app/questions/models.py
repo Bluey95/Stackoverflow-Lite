@@ -58,7 +58,7 @@ class Question(object):
 
     def fetch_by_id(self, id):
         """ Serialize tuple into dictionary """
-        cur.execute("SELECT * FROM questions WHERE id = %s;", (id,))
+        cur.execute("SELECT *, (Select COUNT(*) from answers where answers.question_id=%s) as no_of_answers FROM questions WHERE id = %s;", (id, id))
         question = cur.fetchone()
         if question:
             return self.question_serialiser(question)
