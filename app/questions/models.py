@@ -52,6 +52,7 @@ class Question(object):
             body=question[2],
             created_by=question[3],
             user_id=question[4]
+            no_of_answers=question[5]
         )
         return question_details
 
