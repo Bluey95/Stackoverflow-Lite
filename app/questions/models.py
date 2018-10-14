@@ -34,7 +34,7 @@ class Question(object):
     
     def get_all_questions(self):
         """retrieve all users"""
-        cur.execute("SELECT * FROM questions")
+        cur.execute("SELECT *, (Select COUNT(*) from answers where answers.question_id=questions.id) as no_of_answers FROM questions")
         """fetch all questions using cursor and assign results to questions_tuple"""
         questions_tuple = cur.fetchall()
         questions = []
@@ -52,20 +52,21 @@ class Question(object):
             body=question[2],
             created_by=question[3],
             user_id=question[4],
+            no_of_answers=question[5]
         )
         return question_details
 
     def fetch_by_id(self, id):
         """ Serialize tuple into dictionary """
-        cur.execute("SELECT *, (Select COUNT(*) from answers where answers.question_id=%s) as no_of_answers FROM questions WHERE id = %s;", (id, id))
+        cur.execute("SELECT * questions WHERE id = %s;", (id, id))
         question = cur.fetchone()
         if question:
-            return self.question_serialiser(question)
+            return question
         return False
 
     def fetch_question_by_id(self, id):
         """ Serialize tuple into dictionary """
-        cur.execute("SELECT *, (Select COUNT(*) from answers where answers.question_id=%s) as no_of_answers FROM questions WHERE id = %s;", (id, id))
+        cur.execute("SELECT * FROM questions WHERE id = %s;", (id, id))
         question = cur.fetchone()
         ans = Answer()
         answers = ans.fetch_answers_by_question_id(id)
