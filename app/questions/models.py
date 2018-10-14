@@ -41,10 +41,10 @@ class Question(object):
 
         for question in questions_tuple:
             """append questions after serializing to the list"""
-            questions.append(self.question_serialiser(question))
+            questions.append(self.questions_serialiser(question))
         return jsonify({"Questions": questions})
 
-    def question_serialiser(self, question):
+    def questions_serialiser(self, question):
         """ Serialize tuple into dictionary """
         question_details = dict(
             id=question[0],
@@ -56,9 +56,20 @@ class Question(object):
         )
         return question_details
 
+    def question_serialiser(self, question):
+        """ Serialize tuple into dictionary """
+        question_details = dict(
+            id=question[0],
+            title=question[1],
+            body=question[2],
+            created_by=question[3],
+            user_id=question[4]
+        )
+        return question_details
+
     def fetch_by_id(self, id):
         """ Serialize tuple into dictionary """
-        cur.execute("SELECT * questions WHERE id = %s;", (id, id))
+        cur.execute("SELECT * questions WHERE id = %s;", (id,))
         question = cur.fetchone()
         if question:
             return question
@@ -66,7 +77,7 @@ class Question(object):
 
     def fetch_question_by_id(self, id):
         """ Serialize tuple into dictionary """
-        cur.execute("SELECT * FROM questions WHERE id = %s;", (id, id))
+        cur.execute("SELECT * FROM questions WHERE id = %s;", (id,))
         question = cur.fetchone()
         ans = Answer()
         answers = ans.fetch_answers_by_question_id(id)
